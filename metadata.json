@@ -1,0 +1,6 @@
+{
+  "name": "JanMitra - Citizen Civic Portal",
+  "description": "Multilingual citizen complaint and civic issue reporting platform with real-time tracking, interactive maps, voice assistant, and government officer resolution.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
