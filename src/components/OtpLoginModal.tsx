@@ -122,7 +122,7 @@ export const OtpLoginModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-xs p-3 sm:p-4 animate-in fade-in">
-      <div className="w-full max-w-sm sm:max-w-md bg-white rounded-3xl p-4 sm:p-6 shadow-2xl relative border border-gray-100 max-h-[92vh] overflow-y-auto">
+      <div className="w-full max-w-[360px] sm:max-w-md bg-white rounded-3xl p-4 sm:p-6 shadow-2xl relative border border-gray-100 max-h-[92vh] overflow-y-auto">
         {/* Close Button */}
         <button
           onClick={onClose}

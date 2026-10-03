@@ -108,7 +108,7 @@ const MainContent: React.FC = () => {
 
       {/* Top Header Bar */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-2xs">
-        <div className={`mx-auto px-2.5 sm:px-4 h-15 sm:h-16 flex items-center justify-between gap-1.5 sm:gap-3 ${viewMode === 'desktop' && !isMobileFrame ? 'max-w-7xl' : 'max-w-4xl'}`}>
+        <div className={`mx-auto px-3 sm:px-4 h-14 sm:h-16 flex items-center justify-between gap-2 ${viewMode === 'desktop' && !isMobileFrame ? 'max-w-7xl' : 'max-w-4xl'}`}>
           {/* Logo & Civic Branding */}
           <div
             onClick={() => navigateToTab('feed')}
@@ -196,36 +196,35 @@ const MainContent: React.FC = () => {
           )}
 
           {/* Right Header Actions */}
-          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-            {/* View Mode Toggle: Desktop / Mobile */}
-            <div className="flex items-center bg-gray-100 p-0.5 rounded-xl border border-gray-200 shadow-2xs shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            {/* View Mode Toggle: Desktop / Mobile (shown on larger screens) */}
+            <div className="hidden sm:flex items-center bg-gray-100 p-0.5 rounded-xl border border-gray-200 shadow-2xs shrink-0">
               <button
                 onClick={() => handleSetViewMode('desktop')}
                 title="Desktop View"
-                className={`flex items-center gap-1 px-1.5 py-1 sm:px-2 rounded-lg text-[11px] font-bold transition cursor-pointer ${
+                className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer ${
                   viewMode === 'desktop'
                     ? 'bg-white text-emerald-800 shadow-xs'
                     : 'text-gray-500 hover:text-gray-800'
                 }`}
               >
                 <Monitor size={12} className="shrink-0" />
-                <span className="hidden md:inline">Desktop</span>
+                <span>Desktop</span>
               </button>
               <button
                 onClick={() => handleSetViewMode('mobile')}
                 title="Mobile View"
-                className={`flex items-center gap-1 px-1.5 py-1 sm:px-2 rounded-lg text-[11px] font-bold transition cursor-pointer ${
+                className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer ${
                   viewMode === 'mobile'
                     ? 'bg-white text-emerald-800 shadow-xs'
                     : 'text-gray-500 hover:text-gray-800'
                 }`}
               >
                 <Smartphone size={12} className="shrink-0" />
-                <span className="hidden md:inline">Mobile</span>
+                <span>Mobile</span>
               </button>
             </div>
 
-            <UserPersonaSwitcher />
             <LanguageSelector variant="badge" />
 
             {/* Notification Bell */}
@@ -254,6 +253,9 @@ const MainContent: React.FC = () => {
             </button>
           </div>
         </div>
+
+        {/* Dedicated 2-Person Quick Switch & Quick OTP Login Row */}
+        <UserPersonaSwitcher variant="row" />
       </header>
 
       {/* Main Page Content */}
@@ -558,68 +560,37 @@ const MainContent: React.FC = () => {
     </div>
   );
 
-  // If "Mobile View" is selected AND screen is a desktop/laptop (>= 768px):
-  // Render inside the authentic smartphone device frame!
-  if (viewMode === 'mobile') {
+  // Check if current screen is desktop/laptop (>= 768px)
+  const isDesktopViewport = typeof window !== 'undefined' && window.innerWidth >= 768;
+
+  // If user is on a desktop computer AND clicked "Mobile View" to test mobile simulation:
+  if (viewMode === 'mobile' && isDesktopViewport) {
     return (
-      <div className="min-h-screen bg-slate-900/95 py-6 px-4 flex flex-col items-center justify-center relative">
-        {/* Floating Top Control Bar */}
-        <div className="w-full max-w-md mb-4 flex items-center justify-between text-xs text-slate-300">
+      <div className="min-h-screen bg-slate-900 py-6 px-4 flex flex-col items-center justify-start">
+        {/* Top Control Bar for desktop user */}
+        <div className="w-full max-w-md mb-3 flex items-center justify-between text-xs text-slate-300">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-semibold text-white">📱 Mobile Preview (393 × 852)</span>
+            <span className="font-semibold text-white">📱 Mobile View Simulation (390px)</span>
           </div>
-
-          <div className="flex items-center bg-slate-800 p-0.5 rounded-xl border border-slate-700">
-            <button
-              onClick={() => handleSetViewMode('desktop')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-300 hover:text-white transition font-medium cursor-pointer"
-            >
-              <Monitor size={14} />
-              <span>Desktop View</span>
-            </button>
-            <button
-              onClick={() => handleSetViewMode('mobile')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold transition shadow-xs cursor-pointer"
-            >
-              <Smartphone size={14} />
-              <span>Mobile View</span>
-            </button>
-          </div>
+          <button
+            onClick={() => handleSetViewMode('desktop')}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold transition cursor-pointer border border-slate-700"
+          >
+            <Monitor size={14} />
+            <span>Switch to Desktop View</span>
+          </button>
         </div>
 
-        {/* Smartphone Chassis Mockup */}
-        <div className="w-full max-w-[393px] h-[852px] max-h-[90vh] rounded-[52px] border-[10px] border-slate-950 shadow-2xl ring-1 ring-white/10 relative flex flex-col bg-white overflow-hidden">
-          {/* Dynamic Island Pill */}
-          <div className="w-28 h-6 bg-slate-950 rounded-full mx-auto absolute top-2.5 left-1/2 -translate-x-1/2 z-50 flex items-center justify-end px-2.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-slate-900 border border-slate-800" />
-          </div>
-
-          {/* Simulated Mobile Status Bar */}
-          <div className="h-10 bg-white/90 backdrop-blur-md px-6 flex items-end justify-between pb-1 text-[11px] font-bold text-gray-800 select-none shrink-0 z-40">
-            <span>9:41</span>
-            <div className="flex items-center gap-1.5 text-gray-700">
-              <Signal size={12} />
-              <Wifi size={12} />
-              <Battery size={13} className="fill-current" />
-            </div>
-          </div>
-
-          {/* Inner Phone Screen Content */}
-          <div className="flex-1 overflow-y-auto no-scrollbar relative">
-            {renderAppContent(true)}
-          </div>
+        {/* Clean, authentic mobile screen container (No fake chassis, no cutout covering header) */}
+        <div className="w-full max-w-[420px] min-h-[820px] bg-white rounded-3xl shadow-2xl border border-slate-700 overflow-hidden relative flex flex-col">
+          {renderAppContent(false)}
         </div>
-
-        {/* Real phone link hint below the phone frame */}
-        <p className="mt-4 text-[11px] text-slate-400">
-          💡 For testing on your real phone, open <strong className="text-white font-mono">http://10.166.28.197:3000</strong> on mobile Safari/Chrome.
-        </p>
       </div>
     );
   }
 
-  // DESKTOP FULL-WIDTH VIEW
+  // Full-width native experience (for all real mobile devices, or desktop in Desktop view)
   return renderAppContent(false);
 };
 
