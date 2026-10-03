@@ -67,6 +67,19 @@ export interface CostAnalysis {
   recommendations: string;
 }
 
+export interface SupportingReport {
+  id: string;
+  problem_id: string;
+  user_id: string;
+  user_name: string;
+  user_avatar?: string;
+  notes?: string;
+  image?: string;
+  created_at: string;
+  latitude?: number;
+  longitude?: number;
+}
+
 export interface Problem {
   id: string;
   user_id: string;
@@ -122,6 +135,10 @@ export interface Problem {
   distance?: number;
   timeline?: StatusHistoryItem[];
   comments?: ProblemComment[];
+  hype_score?: number;
+  hypeCount?: number;
+  hyped_by?: string[];
+  supporting_reports?: SupportingReport[];
 }
 
 export interface ProblemComment {

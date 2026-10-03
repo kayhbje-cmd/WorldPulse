@@ -332,6 +332,28 @@ export const INITIAL_PROBLEMS: Problem[] = [
     upvotes: 48,
     downvotes: 1,
     views: 412,
+    hype_score: 58,
+    hypeCount: 58,
+    hyped_by: ['usr-1', 'usr-2', 'usr-3', 'usr-4'],
+    supporting_reports: [
+      {
+        id: 'sr-1',
+        problem_id: 'prob-001',
+        user_id: 'usr-4',
+        user_name: 'Pooja Nair',
+        notes: 'Witnessed this morning. Two auto-rickshaws broke their suspensions.',
+        image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&auto=format&fit=crop&q=80',
+        created_at: new Date(Date.now() - 20 * 3600 * 1000).toISOString(),
+      },
+      {
+        id: 'sr-2',
+        problem_id: 'prob-001',
+        user_id: 'usr-2',
+        user_name: 'Meera Patil',
+        notes: 'Water filled up the pothole during rain, completely invisible to two-wheelers.',
+        created_at: new Date(Date.now() - 14 * 3600 * 1000).toISOString(),
+      }
+    ],
     trending_score: 96,
     impact_score: 88,
     affected_people: 12000,
@@ -423,6 +445,19 @@ export const INITIAL_PROBLEMS: Problem[] = [
     upvotes: 35,
     downvotes: 0,
     views: 290,
+    hype_score: 35,
+    hypeCount: 35,
+    hyped_by: ['usr-2', 'usr-3'],
+    supporting_reports: [
+      {
+        id: 'sr-3',
+        problem_id: 'prob-002',
+        user_id: 'usr-3',
+        user_name: 'Rohan Joshi',
+        notes: 'Garbage has started spilling into the school pathway this morning.',
+        created_at: new Date(Date.now() - 10 * 3600 * 1000).toISOString(),
+      }
+    ],
     trending_score: 84,
     impact_score: 79,
     affected_people: 4500,
@@ -497,6 +532,19 @@ export const INITIAL_PROBLEMS: Problem[] = [
     upvotes: 62,
     downvotes: 0,
     views: 520,
+    hype_score: 62,
+    hypeCount: 62,
+    hyped_by: ['usr-3', 'usr-1'],
+    supporting_reports: [
+      {
+        id: 'sr-4',
+        problem_id: 'prob-003',
+        user_id: 'usr-1',
+        user_name: 'Aarav Sharma',
+        notes: 'Water pressure in neighboring building dropped to zero as a result.',
+        created_at: new Date(Date.now() - 40 * 3600 * 1000).toISOString(),
+      }
+    ],
     trending_score: 91,
     impact_score: 95,
     affected_people: 8000,
@@ -573,6 +621,19 @@ export const INITIAL_PROBLEMS: Problem[] = [
     upvotes: 19,
     downvotes: 0,
     views: 110,
+    hype_score: 19,
+    hypeCount: 19,
+    hyped_by: ['usr-1'],
+    supporting_reports: [
+      {
+        id: 'sr-5',
+        problem_id: 'prob-004',
+        user_id: 'usr-2',
+        user_name: 'Meera Patil',
+        notes: 'Saw sparks flying when a double-decker bus passed under it.',
+        created_at: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+      }
+    ],
     trending_score: 95,
     impact_score: 92,
     affected_people: 15000,
@@ -632,6 +693,19 @@ export const INITIAL_PROBLEMS: Problem[] = [
     upvotes: 27,
     downvotes: 0,
     views: 198,
+    hype_score: 27,
+    hypeCount: 27,
+    hyped_by: ['usr-5'],
+    supporting_reports: [
+      {
+        id: 'sr-6',
+        problem_id: 'prob-005',
+        user_id: 'usr-3',
+        user_name: 'Rohan Joshi',
+        notes: 'Had to carry an elderly relative over the curb because wheelchair could not pass.',
+        created_at: new Date(Date.now() - 8 * 3600 * 1000).toISOString(),
+      }
+    ],
     trending_score: 77,
     impact_score: 82,
     affected_people: 1800,
@@ -698,6 +772,19 @@ export const INITIAL_PROBLEMS: Problem[] = [
     upvotes: 41,
     downvotes: 1,
     views: 340,
+    hype_score: 41,
+    hypeCount: 41,
+    hyped_by: ['usr-6', 'usr-1'],
+    supporting_reports: [
+      {
+        id: 'sr-7',
+        problem_id: 'prob-006',
+        user_id: 'usr-4',
+        user_name: 'Pooja Nair',
+        notes: 'Three neighbors down with dengue in the past week.',
+        created_at: new Date(Date.now() - 15 * 3600 * 1000).toISOString(),
+      }
+    ],
     trending_score: 83,
     impact_score: 89,
     affected_people: 3200,
