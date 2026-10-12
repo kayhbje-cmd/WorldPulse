@@ -1,7 +1,8 @@
-// src/services/eventService.ts - 100% Client-Side Local Storage Service (Zero Mock Data)
+// src/services/eventService.ts - 100% Client-Side Local Storage Service (Zero Mock Data, 24h Auto-Deletion)
 
 import { BhandaraEvent, EventReport, EventStatus } from '../types';
 import { EventReportFormData, EventSubmissionFormData } from '../utils/validation';
+import { EVENT_TTL_MS, isEventExpired24h } from '../utils/status';
 
 // Clean storage key ensuring no legacy mock data is loaded
 const STORAGE_KEY_EVENTS = 'bhandara_live_events_clean';
@@ -11,9 +12,11 @@ class EventService {
   private eventsCache: BhandaraEvent[] = [];
   private reportsCache: EventReport[] = [];
   private listeners: Set<() => void> = new Set();
+  private cleanupInterval: any = null;
 
   constructor() {
     this.initLocalData();
+    this.startAutoCleanupTimer();
   }
 
   public subscribe(callback: () => void): () => void {
@@ -23,6 +26,51 @@ class EventService {
 
   private notify() {
     this.listeners.forEach((cb) => cb());
+  }
+
+  /**
+   * Starts periodic 60-second cleanup timer to purge events reaching 24 hours
+   */
+  private startAutoCleanupTimer() {
+    if (typeof window !== 'undefined' && !this.cleanupInterval) {
+      this.cleanupInterval = setInterval(() => {
+        this.cleanupExpiredEvents();
+      }, 60 * 1000);
+    }
+  }
+
+  /**
+   * Automatically deletes any uploaded event older than 24 hours.
+   * Returns true if any expired events were purged.
+   */
+  public cleanupExpiredEvents(referenceDate: Date = new Date()): boolean {
+    const initialCount = this.eventsCache.length;
+    const activeEvents = this.eventsCache.filter((e) => !isEventExpired24h(e.created_at, referenceDate));
+
+    if (activeEvents.length !== initialCount) {
+      this.eventsCache = activeEvents;
+      try {
+        localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify(activeEvents));
+      } catch (e) {
+        console.warn('LocalStorage save failed during expiry cleanup:', e);
+      }
+
+      // Also clean up any orphan reports belonging to purged events
+      const activeIds = new Set(activeEvents.map((e) => e.id));
+      const activeReports = this.reportsCache.filter((r) => activeIds.has(r.event_id));
+      if (activeReports.length !== this.reportsCache.length) {
+        this.reportsCache = activeReports;
+        try {
+          localStorage.setItem(STORAGE_KEY_REPORTS, JSON.stringify(activeReports));
+        } catch (e) {
+          console.warn('LocalStorage report cleanup save failed:', e);
+        }
+      }
+
+      this.notify();
+      return true;
+    }
+    return false;
   }
 
   private initLocalData() {
@@ -49,6 +97,9 @@ class EventService {
         this.reportsCache = [];
         localStorage.setItem(STORAGE_KEY_REPORTS, JSON.stringify([]));
       }
+
+      // Immediately purge any events that reached 24 hours while page was closed
+      this.cleanupExpiredEvents();
     } catch {
       this.eventsCache = [];
       this.reportsCache = [];
@@ -76,16 +127,18 @@ class EventService {
   }
 
   /**
-   * Fetch all live active events for public view
+   * Fetch all live active events for public view (automatically cleans 24h expired events)
    */
   public async getApprovedEvents(): Promise<BhandaraEvent[]> {
+    this.cleanupExpiredEvents();
     return this.eventsCache.filter((e) => e.status === 'approved' || e.status === 'completed');
   }
 
   /**
-   * Fetch all events
+   * Fetch all events (automatically cleans 24h expired events)
    */
   public async getAllEvents(): Promise<BhandaraEvent[]> {
+    this.cleanupExpiredEvents();
     return [...this.eventsCache];
   }
 
@@ -100,24 +153,29 @@ class EventService {
    * Pending events helper
    */
   public async getPendingEvents(): Promise<BhandaraEvent[]> {
+    this.cleanupExpiredEvents();
     return this.eventsCache.filter((e) => e.status === 'pending');
   }
 
   /**
-   * Fetch single event by ID
+   * Fetch single event by ID (returns null if 24h expired)
    */
   public async getEventById(id: string): Promise<BhandaraEvent | null> {
+    this.cleanupExpiredEvents();
     return this.eventsCache.find((e) => e.id === id) || null;
   }
 
   /**
    * Anyone can submit/upload a Bhandara with location and photo - published immediately!
+   * Automatically scheduled for 24-hour deletion.
    */
   public async submitEvent(formData: EventSubmissionFormData): Promise<BhandaraEvent> {
-    const todayStr = new Date().toISOString().split('T')[0];
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
     const locationText = (formData.address || '').trim();
     const userName = (formData.organizer_name || 'Community Devotee').trim();
     const eventTitle = formData.title?.trim() || `Bhandara at ${locationText}`;
+    const expiresAt = new Date(now.getTime() + EVENT_TTL_MS).toISOString();
 
     const newEvent: BhandaraEvent = {
       id: `bh-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
@@ -142,8 +200,9 @@ class EventService {
         'https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?auto=format&fit=crop&w=1200&q=80',
       status: 'approved', // Published immediately for all users to view and find!
       is_demo: false,
-      created_at: new Date().toISOString(),
-      verified_at: new Date().toISOString(),
+      created_at: now.toISOString(),
+      expires_at: expiresAt, // Explicit 24-hr auto-expiry timestamp
+      verified_at: now.toISOString(),
     };
 
     const updated = [newEvent, ...this.eventsCache];

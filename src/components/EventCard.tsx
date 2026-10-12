@@ -20,7 +20,8 @@ import {
   getStatusBadge, 
   getCategoryDetails, 
   formatEventDate, 
-  formatTimeRange 
+  formatTimeRange,
+  getTimeRemaining24h
 } from '../utils/status';
 import { formatDistance, getGoogleMapsDirectionsUrl } from '../utils/geo';
 
@@ -42,6 +43,7 @@ export const EventCard: React.FC<EventCardProps> = ({
   const statusBadge = getStatusBadge(liveStatus);
   const categoryDetails = getCategoryDetails(event.category);
   const directionsUrl = getGoogleMapsDirectionsUrl(event);
+  const timeRemaining = getTimeRemaining24h(event.created_at);
 
   return (
     <article className="bg-white rounded-3xl overflow-hidden border border-orange-100/90 shadow-sm hover:shadow-xl hover:shadow-orange-950/10 transition-all duration-300 flex flex-col bhandara-card-hover group">
@@ -154,6 +156,17 @@ export const EventCard: React.FC<EventCardProps> = ({
 
             <span className="text-[11px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 font-semibold">
               Live Listing
+            </span>
+          </div>
+
+          {/* 24-Hour Expiry Notice */}
+          <div className="flex items-center justify-between text-[11px] bg-amber-50/70 border border-amber-200/60 rounded-xl px-2.5 py-1.5 text-stone-600">
+            <div className="flex items-center space-x-1.5 text-amber-950 font-medium">
+              <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+              <span>Auto-deletes after 24h:</span>
+            </div>
+            <span className="font-bold text-amber-800 bg-white/90 px-2 py-0.5 rounded-md border border-amber-200 shadow-2xs">
+              {timeRemaining.formatted}
             </span>
           </div>
         </div>

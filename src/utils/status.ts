@@ -200,3 +200,66 @@ export function formatEventDate(dateStr: string): string {
     return dateStr;
   }
 }
+
+/**
+ * 24 Hours in Milliseconds for automatic event deletion
+ */
+export const EVENT_TTL_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * Checks if an event is older than 24 hours
+ */
+export function isEventExpired24h(createdAtIso: string, referenceDate: Date = new Date()): boolean {
+  if (!createdAtIso) return true;
+  const createdTime = new Date(createdAtIso).getTime();
+  if (isNaN(createdTime)) return true;
+  return referenceDate.getTime() - createdTime >= EVENT_TTL_MS;
+}
+
+/**
+ * Computes exact time remaining before 24-hr auto-deletion
+ */
+export function getTimeRemaining24h(createdAtIso: string, referenceDate: Date = new Date()): {
+  isExpired: boolean;
+  hoursLeft: number;
+  minutesLeft: number;
+  formatted: string;
+  percentRemaining: number;
+} {
+  if (!createdAtIso) {
+    return { isExpired: true, hoursLeft: 0, minutesLeft: 0, formatted: 'Expired', percentRemaining: 0 };
+  }
+  const createdTime = new Date(createdAtIso).getTime();
+  if (isNaN(createdTime)) {
+    return { isExpired: true, hoursLeft: 0, minutesLeft: 0, formatted: 'Expired', percentRemaining: 0 };
+  }
+  const expiryTime = createdTime + EVENT_TTL_MS;
+  const diffMs = expiryTime - referenceDate.getTime();
+
+  if (diffMs <= 0) {
+    return { isExpired: true, hoursLeft: 0, minutesLeft: 0, formatted: 'Expired', percentRemaining: 0 };
+  }
+
+  const totalMinutes = Math.floor(diffMs / (60 * 1000));
+  const hoursLeft = Math.floor(totalMinutes / 60);
+  const minutesLeft = totalMinutes % 60;
+  const percentRemaining = Math.max(0, Math.min(100, Math.round((diffMs / EVENT_TTL_MS) * 100)));
+
+  let formatted = '';
+  if (hoursLeft > 0) {
+    formatted = `${hoursLeft}h ${minutesLeft}m left`;
+  } else if (minutesLeft > 0) {
+    formatted = `${minutesLeft}m left`;
+  } else {
+    formatted = '< 1m left';
+  }
+
+  return {
+    isExpired: false,
+    hoursLeft,
+    minutesLeft,
+    formatted,
+    percentRemaining,
+  };
+}
+

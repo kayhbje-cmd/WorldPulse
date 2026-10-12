@@ -24,7 +24,8 @@ import {
   getStatusBadge, 
   getCategoryDetails, 
   formatEventDate, 
-  formatTimeRange 
+  formatTimeRange,
+  getTimeRemaining24h
 } from '../utils/status';
 import { formatDistance, getGoogleMapsDirectionsUrl } from '../utils/geo';
 
@@ -51,6 +52,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
   const statusBadge = getStatusBadge(liveStatus);
   const categoryDetails = getCategoryDetails(event.category);
   const directionsUrl = getGoogleMapsDirectionsUrl(event);
+  const timeRemaining = getTimeRemaining24h(event.created_at);
 
   const handleShare = async () => {
     const shareData = {
@@ -171,6 +173,20 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
                 </span>
               </div>
             </div>
+          </div>
+
+          {/* 24-Hour Auto-Deletion Notice */}
+          <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/90 rounded-2xl p-3.5 flex items-center justify-between gap-3 text-xs">
+            <div className="flex items-center space-x-2.5 text-stone-700">
+              <Clock className="w-4 h-4 text-orange-600 shrink-0" />
+              <div>
+                <span className="font-bold text-amber-950 block">Auto-deletes after 24 hours</span>
+                <span className="text-[11px] text-stone-500">To keep community locations 100% active & fresh</span>
+              </div>
+            </div>
+            <span className="font-bold text-amber-900 bg-white/90 border border-amber-200/80 px-2.5 py-1 rounded-lg shrink-0 shadow-2xs">
+              {timeRemaining.formatted}
+            </span>
           </div>
 
           {/* Mahaprasad Menu Details */}

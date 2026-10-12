@@ -42,6 +42,7 @@ export interface BhandaraEvent {
   status: EventStatus;
   is_demo: boolean;
   created_at: string;
+  expires_at?: string;
   updated_at?: string;
   rejection_reason?: string;
   verified_at?: string;

@@ -11,7 +11,8 @@ import {
   Upload, 
   Sparkles,
   RefreshCw,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Clock
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { eventSubmissionSchema } from '../utils/validation';
@@ -218,7 +219,7 @@ export const SubmitEventModal: React.FC<SubmitEventModalProps> = ({
                 <span>{locationAddress}</span>
               </div>
               <p className="text-[11px] text-stone-600">
-                Status: 🟢 Published immediately on community map
+                Status: 🟢 Live on community map • ⏱️ Auto-deleted after 24 hours
               </p>
             </div>
 
@@ -396,6 +397,10 @@ export const SubmitEventModal: React.FC<SubmitEventModalProps> = ({
               <p className="text-[11px] text-stone-400 text-center mt-2">
                 Instantly published • No sign-up required • Free for everyone
               </p>
+              <div className="flex items-center justify-center space-x-1.5 text-[11px] text-amber-900 bg-amber-50/80 border border-amber-200/70 rounded-xl py-2 px-3 mt-2.5">
+                <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                <span>Auto-deletion: Listings automatically disappear after 24 hours.</span>
+              </div>
             </div>
           </form>
         )}
