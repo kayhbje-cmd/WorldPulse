@@ -3,38 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>JanMitra - Citizen Civic Portal</title>
-    <meta name="description" content="Multilingual citizen complaint and civic issue reporting platform with real-time tracking, interactive maps, voice assistant, and government officer resolution." />
-    <meta name="theme-color" content="#16A34A" />
+    <title>Bhandara Finder | Discover Mahaprasad & Community Meals in Amravati</title>
+    <meta name="description" content="Discover upcoming and currently serving Bhandara, J1 community meals, Annadan Seva, and temple Mahaprasad in Amravati, Maharashtra. Share and find verified community feasts." />
+    <meta name="theme-color" content="#EA580C" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="JanMitra" />
+    <meta name="apple-mobile-web-app-title" content="Bhandara Finder" />
+
+    <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
     <!-- Open Graph -->
-    <meta property="og:title" content="JanMitra - Citizen Civic Portal" />
-    <meta property="og:description" content="Multilingual citizen complaint and civic issue reporting platform with real-time tracking, interactive maps, voice assistant, and government officer resolution." />
+    <meta property="og:title" content="Bhandara Finder - Mahaprasad & Annadan Seva Discovery" />
+    <meta property="og:description" content="Discover upcoming and active Bhandara, J1 community meals, and temple Mahaprasad near you in Amravati, Maharashtra." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/icons/icon-512x512.png" />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1610192244261-3f33de3f55e4?auto=format&fit=crop&w=1200&q=80" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="manifest" href="/manifest.json" />
-    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
-    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23EA580C'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z'/%3E%3C/svg%3E" />
   </head>
-  <body class="bg-gray-50 text-gray-900 antialiased select-none-subtle">
+  <body class="bg-[#FDFBF7] text-[#291809] antialiased selection:bg-orange-200 selection:text-orange-950 min-h-screen">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/service-worker.js').catch(err => {
-            console.log('SW registration note:', err);
-          });
-        });
-      }
-    </script>
   </body>
 </html>
 

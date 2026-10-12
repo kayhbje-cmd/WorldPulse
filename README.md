@@ -1,89 +1,135 @@
-﻿# Smart Civic (JanMitra) - Citizen Civic Reporting Portal
+# Bhandara Finder | Amravati, Maharashtra
 
 <div align="center">
 
-[![Milestone](https://img.shields.io/badge/Milestone-Phase%201%20(20%25)-emerald.svg)](#milestone-progress)
 [![React](https://img.shields.io/badge/React-19-blue.svg)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-6.x-purple.svg)](https://vitejs.dev/)
+[![Vite](https://img.shields.io/badge/Vite-8.x-purple.svg)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-cyan.svg)](https://tailwindcss.com/)
+[![Vitest](https://img.shields.io/badge/Tests-19%20Passing-emerald.svg)](https://vitest.dev/)
 
-**A modern, multilingual civic issue reporting and municipal resolution platform.**
+**A modern, responsive community-service platform for discovering and sharing Bhandara, J1 community meals, Annadan Seva, and Mahaprasad events.**
+
+*Initially focused on Amravati, Maharashtra, India.*
 
 </div>
 
 ---
 
 ## 📌 Project Overview
-**Smart Civic** connects citizens directly with municipal departments and field engineers to report, track, and resolve civic infrastructure issues such as potholes, garbage accumulation, water pipeline leaks, street lighting failures, and accessibility barriers.
+
+**Bhandara Finder** is a community discovery platform designed with a welcoming, sacred Indian aesthetic (saffron orange, warm cream, crisp white, and deep espresso brown). It connects devotees, students, and citizens with authentic upcoming and currently active community meals across Amravati.
+
+Users can discover events, filter by locality or status, search by temple or menu, check live serving hours, get turn-by-turn directions via Google Maps, share event links via the Web Share API, report inaccurate timings, and submit new community feasts for admin verification.
 
 ---
 
-## 🎯 Milestone 1 Deliverables (20% Completed)
+## 🌟 Key Features
 
-This release marks the completion of **Milestone 1 (Foundational 20%)**:
+### 1. Modern, Culturally Grounded Design
+- Warm Indian community-service palette: Saffron orange (`#EA580C`), warm cream (`#FDFBF7`, `#FEF3C7`), and dark espresso brown (`#291809`).
+- Elegant typography (`Outfit` for headings, `Plus Jakarta Sans` for body text).
+- Responsive on mobile, tablet, and desktop viewports.
+- High-quality, culturally authentic photography of Mahaprasad feasts, temple distribution, and seva.
 
-- [x] **Project Scaffolding & Build Configuration**:
-  - Vite + React 19 + TypeScript configuration with strict type checks.
-  - Tailwind CSS v4 styling system and PostCSS setup.
-  - Progressive Web App (PWA) manifest and icon assets.
-- [x] **Civic Domain Data Models & Types (`src/types/index.ts`)**:
-  - `Problem` data contract with geospatial coordinates, urgency levels, and resolution states.
-  - `Officer` and `Department` schemas for municipal hierarchy and routing.
-  - `StatusHistoryItem` timeline audit log schemas.
-  - `CostAnalysis` and severity rating models.
-- [x] **Department & Category Registry (`src/constants/categories.ts`)**:
-  - 8 core civic categories (Infrastructure, Sanitation, Utilities, Safety Hazards, Accessibility, Environment, Public Health, Other).
-  - SLA configurations, department mapping, and multilingual category labels.
-- [x] **Reusable UI Component Design System (`src/components/ui/`)**:
-  - `Button` (primary, secondary, outline, danger variants with loading states)
-  - `Card` (standard and interactive cards with headers, content, and footers)
-  - `Badge` (status badges with variant color schemes)
-  - `Input` (accessible inputs with error and hint messaging)
-  - `Skeleton` (animated placeholder loaders for asynchronous feeds)
-  - `EmptyState` (reusable empty state illustrations and call-to-actions)
-- [x] **Milestone 1 Foundation Dashboard (`src/App.tsx`)**:
-  - Interactive foundation shell showcasing project architecture, domain models, and UI component library.
+### 2. Live Dynamic Status Calculation
+- **Currently Serving 🟢**: Dynamically calculated when the event is today and the current time is between `start_time` and `end_time`. Displays a pulsing beacon indicator.
+- **Upcoming 🟡**: Upcoming events scheduled for future dates or later today.
+- **Completed ⚪**: Automatically marked completed when event hours have passed.
+- **Cancelled 🔴**: Flagged if cancelled by organizers or administrators.
+
+### 3. Smart Search & Filters
+- **Full-Text Search**: Matches title, locality, venue, street address, Mahaprasad menu items, and organizer name.
+- **Category Filter**: Bhandara (भंडारा), Mahaprasad (महाप्रसाद), Annadan Seva (अन्नदान), Temple Feast (मंदिर महाप्रसाद), Community Meals / J1 (सामुदायिक जेवण).
+- **Time Tabs**: All Events, Today, Currently Serving, Upcoming, Completed.
+- **Amravati Localities**: Filter by Rajapeth, Gadge Nagar, Badnera, Camp, Panchavati, Sai Nagar, Irwin Square, Rukmini Nagar, VMV Road, etc.
+- **Sorting**: Upcoming Date, Nearest First (when GPS is enabled), Recently Added.
+- **Reset Filters**: One-click reset with clean empty state handling.
+
+### 4. Real Geolocation & Haversine Distance
+- HTML5 Geolocation is only requested upon explicit user click on **"Near Me (GPS)"**.
+- Graceful handling of permission denial, timeouts, or unavailable location without fake GPS readings.
+- Real straight-line distance computed using the Haversine formula (e.g. `1.2 km away` or `650 m away`).
+- **"Get Directions"**: Direct one-click Google Maps link using exact coordinates or encoded venue details.
+
+### 5. Event Submission Workflow (`/submit`)
+- Validated with **Zod**:
+  - Event title, category, description, organizer/mandal name.
+  - Public contact number (strictly validated 10-digit Indian mobile number).
+  - Date, start time, end time (verifies end time is after start time).
+  - Venue name, full address, Amravati locality picker.
+  - Mahaprasad menu details, special instructions, and poster presets.
+  - Optional GPS pin of current location.
+  - **Mandatory Consent Checkbox**: Informs the user how public event details will be displayed.
+- Submissions are saved with `status: 'pending'` and **never** published automatically without admin approval.
+- Generates a unique submission tracking ID with celebratory confetti.
+
+### 6. Protected Admin Verification & Moderation Desk
+- Secure sign-in dialog (`admin@bhandarafinder.org` / `Bhandara@Admin2026` for testing).
+- **Pending Submissions**: Review full details, poster, and organizer phone; Approve or Reject with reason.
+- **Live & Approved Events**: Edit details, mark cancelled or completed, and delete spam/duplicates.
+- **Citizen Reports**: Review inaccuracies reported by users and mark them resolved or dismissed.
+- **Direct Event Creation**: Publish pre-verified events immediately.
+
+### 7. Dual-Mode Storage (Client-First + Supabase Ready)
+- Works out of the box with persistent browser storage (localStorage) pre-seeded with realistic Amravati demonstration events.
+- Full Supabase integration:
+  - Ready for `@supabase/supabase-js`.
+  - Comprehensive SQL schema in `supabase/schema.sql` including Row Level Security (RLS) policies.
+  - Configurable via `.env.example` (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`).
 
 ---
 
-## 🗺️ Project Implementation Roadmap
-
-| Phase | Milestone | Progress | Scope | Status |
-|---|---|---|---|---|
-| **Phase 1** | **Foundation & Design System** | **20%** | **Project setup, domain contracts, categories, and UI component primitives** | **Completed** ✅ |
-| Phase 2 | State & Core Services | 40% | Multilingual context (EN/HI/MR), Auth provider, and civic services | In Progress 🔄 |
-| Phase 3 | Reporting & Civic Map | 60% | Geospatial Leaflet map, citizen feed, and issue reporting flow | Upcoming ⏳ |
-| Phase 4 | Officer Portal & Tracking | 80% | Officer triage dashboard, SLA escalation, and status tracking | Upcoming ⏳ |
-| Phase 5 | AI Assistant & PWA | 100% | Voice bot assistant, AI cost estimation, realtime WebSocket sync | Upcoming ⏳ |
-
----
-
-## 💻 Tech Stack
-- **Frontend**: React 19, TypeScript
-- **Styling**: Tailwind CSS v4
-- **Icons**: Lucide React
-- **Build Tool**: Vite
-
----
-
-## 🚀 Getting Started Locally
+## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js (v18 or higher)
-- npm or bun
+- Node.js (v18 or newer)
+- npm (v9 or newer)
 
 ### Installation
 ```bash
-# 1. Clone the repository
-git clone https://github.com/vaijinathshinde07-spec/smart-civic.git
-cd smart-civic
-
-# 2. Install dependencies
-npm install
-
-# 3. Start development server
-npm run dev
+# Install dependencies
+npm install --legacy-peer-deps
 ```
 
-Visit `http://localhost:5173` to view the Milestone 1 foundation shell.
+### Running the Application Locally
+```bash
+# Start Vite development server
+npm run dev
+```
+The application will be live at `http://localhost:5173`.
+
+### Running Automated Tests
+```bash
+# Run Vitest unit tests
+npm run test
+```
+
+### Building for Production
+```bash
+# Type check and build static bundle
+npm run lint
+npm run build
+```
+
+---
+
+## 🗄️ Database & Supabase Setup (Optional)
+
+If you wish to connect to a live Supabase project:
+1. Create a free project at [supabase.com](https://supabase.com).
+2. Run the SQL script located in `supabase/schema.sql` in your Supabase SQL Editor.
+3. Create a `.env` file from `.env.example`:
+   ```env
+   VITE_SUPABASE_URL="https://your-project-id.supabase.co"
+   VITE_SUPABASE_ANON_KEY="your-anon-public-api-key"
+   ```
+4. Restart `npm run dev`. The Navbar will immediately display **"Supabase Connected"**.
+
+---
+
+## 🔑 Admin Evaluation Credentials
+For evaluation and testing of the moderation desk:
+- **Email:** `admin@bhandarafinder.org`
+- **Password:** `Bhandara@Admin2026`
+*(Also accessible via the one-click "Auto-fill demo credentials" link on the Admin login screen.)*

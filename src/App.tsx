@@ -1,606 +1,513 @@
-// src/App.tsx - Dual Desktop & Mobile View Civic Portal
-import React, { useState, useMemo, useEffect } from 'react';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
-import { Problem } from './types';
-import { problemService } from './services/problem.service';
-import { Feed } from './pages/tabs/Feed';
-import { MapView } from './pages/tabs/Map';
-import { PostProblem } from './pages/tabs/Post';
-import { Activity } from './pages/tabs/Activity';
-import { Profile } from './pages/tabs/Profile';
-import { ProblemDetails } from './pages/ProblemDetails';
-import { ComplaintTracking } from './pages/ComplaintTracking';
-import { OfficerDashboard } from './pages/officer/OfficerDashboard';
-import { GovTechDemo } from './pages/GovTechDemo';
-import { ChatScreen } from './pages/Chat';
-import { EditProfile } from './pages/EditProfile';
-import { LanguageSelector } from './components/LanguageSelector';
-import { UserPersonaSwitcher } from './components/UserPersonaSwitcher';
-import { RealtimeToastNotification } from './components/RealtimeToastNotification';
-import { VoiceBotFAB } from './components/VoiceBotFAB';
-import { VoiceAssistantModal } from './components/VoiceAssistantModal';
-import { OfflineIndicator } from './components/OfflineIndicator';
-import { useGeolocation } from './hooks/useGeolocation';
-import { Card } from './components/ui/Card';
-import { Badge } from './components/ui/Badge';
-import { Button } from './components/ui/Button';
+// src/App.tsx - Bhandara Finder Main Application
+
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
-  Home, 
-  Map as MapIcon, 
-  Plus, 
-  Activity as ActivityIcon, 
-  User as UserIcon, 
-  Bell, 
-  MapPin, 
-  Monitor, 
-  Smartphone, 
   Sparkles, 
-  ShieldCheck, 
-  PhoneCall, 
-  TrendingUp, 
+  UtensilsCrossed, 
+  Calendar, 
+  PlusCircle, 
+  RotateCcw, 
   CheckCircle2, 
+  Search, 
+  Flame, 
   Clock, 
-  Building2,
-  Wifi,
-  Battery,
-  Signal
+  MapPin, 
+  HeartHandshake,
+  AlertCircle
 } from 'lucide-react';
-
-type TabType = 'feed' | 'map' | 'post' | 'activity' | 'profile';
-
-type ScreenType =
-  | { type: 'tab'; tab: TabType }
-  | { type: 'problem_details'; problemId: string }
-  | { type: 'problem_tracking'; problem: Problem }
-  | { type: 'chat'; problem: Problem }
-  | { type: 'officer_dashboard' }
-  | { type: 'govtech_demo' }
-  | { type: 'edit_profile' };
-
-const MainContent: React.FC = () => {
-  const { user, isOfficer } = useAuth();
-  const { language, t } = useLanguage();
-  const { location } = useGeolocation();
-
-  // Responsive default: Mobile if screen < 768px, else Desktop
-  const [viewMode, setViewMode] = useState<'desktop' | 'mobile'>(() => {
-    if (typeof window !== 'undefined' && window.innerWidth < 768) {
-      return 'mobile';
-    }
-    return (localStorage.getItem('janmitra_view_mode') as 'desktop' | 'mobile') || 'desktop';
-  });
-
-  const [currentScreen, setCurrentScreen] = useState<ScreenType>({
-    type: 'tab',
-    tab: 'feed',
-  });
-
-  const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
-  const [postInitialData, setPostInitialData] = useState<{ category?: string; title?: string } | undefined>();
-
-  const handleSetViewMode = (mode: 'desktop' | 'mobile') => {
-    setViewMode(mode);
-    localStorage.setItem('janmitra_view_mode', mode);
-  };
-
-  // Fetch unread count for badge
-  const unreadAlertsCount = useMemo(() => {
-    return problemService.getStoredAlerts().filter((a) => !a.read).length;
-  }, [currentScreen]);
-
-  const activeTab: TabType = currentScreen.type === 'tab' ? currentScreen.tab : 'feed';
-
-  const navigateToTab = (tab: TabType) => {
-    setCurrentScreen({ type: 'tab', tab });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  // Sub-component: The actual Civic Application UI
-  const renderAppContent = (isMobileFrame = false) => (
-    <div className={`flex flex-col bg-gray-50/50 text-gray-900 font-sans ${isMobileFrame ? 'min-h-full' : 'min-h-screen'}`}>
-      <OfflineIndicator />
-      <RealtimeToastNotification
-        onViewProblem={(probId) =>
-          setCurrentScreen({ type: 'problem_details', problemId: probId })
-        }
-      />
-
-      {/* Top Header Bar */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-2xs">
-        <div className={`mx-auto px-3 sm:px-4 h-14 sm:h-16 flex items-center justify-between gap-2 ${viewMode === 'desktop' && !isMobileFrame ? 'max-w-7xl' : 'max-w-4xl'}`}>
-          {/* Logo & Civic Branding */}
-          <div
-            onClick={() => navigateToTab('feed')}
-            className="flex items-center gap-2 sm:gap-2.5 cursor-pointer select-none shrink-0"
-          >
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl bg-linear-to-tr from-emerald-600 to-emerald-500 text-white flex items-center justify-center shadow-md shadow-emerald-600/30">
-              <span className="text-lg sm:text-xl">🏛️</span>
-            </div>
-            <div>
-              <div className="flex items-center gap-1 sm:gap-1.5">
-                <span className="text-sm sm:text-base font-black text-gray-900 tracking-tight">
-                  JanMitra
-                </span>
-                <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-100 px-1.5 py-0.5 rounded-sm">
-                  {isOfficer ? 'OFFICER' : 'NAGRIK'}
-                </span>
-              </div>
-              <div className="hidden xs:flex sm:flex items-center gap-1 text-[10px] sm:text-[11px] text-gray-500 font-medium">
-                <MapPin size={10} className="text-emerald-600" />
-                <span className="truncate max-w-[85px] sm:max-w-[180px]">
-                  {location ? 'Mumbai Metro' : t('currentLocation', 'Maharashtra')}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Desktop Navigation Links (Visible only on Desktop View) */}
-          {viewMode === 'desktop' && !isMobileFrame && (
-            <nav className="hidden md:flex items-center gap-1 lg:gap-2">
-              <button
-                onClick={() => navigateToTab('feed')}
-                className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
-                  activeTab === 'feed'
-                    ? 'bg-emerald-50 text-emerald-800'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`}
-              >
-                <Home size={15} />
-                <span>Feed</span>
-              </button>
-              <button
-                onClick={() => navigateToTab('map')}
-                className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
-                  activeTab === 'map'
-                    ? 'bg-emerald-50 text-emerald-800'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`}
-              >
-                <MapIcon size={15} />
-                <span>Civic Map</span>
-              </button>
-              <button
-                onClick={() => navigateToTab('post')}
-                className="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm transition flex items-center gap-1.5 cursor-pointer"
-              >
-                <Plus size={15} className="stroke-[2.5]" />
-                <span>Report Issue</span>
-              </button>
-              <button
-                onClick={() => navigateToTab('activity')}
-                className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 relative cursor-pointer ${
-                  activeTab === 'activity'
-                    ? 'bg-emerald-50 text-emerald-800'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`}
-              >
-                <ActivityIcon size={15} />
-                <span>Activity</span>
-                {unreadAlertsCount > 0 && (
-                  <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                )}
-              </button>
-              <button
-                onClick={() => navigateToTab('profile')}
-                className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
-                  activeTab === 'profile'
-                    ? 'bg-emerald-50 text-emerald-800'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`}
-              >
-                <UserIcon size={15} />
-                <span>Profile</span>
-              </button>
-            </nav>
-          )}
-
-          {/* Right Header Actions */}
-          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-            {/* View Mode Toggle: Desktop / Mobile (shown on larger screens) */}
-            <div className="hidden sm:flex items-center bg-gray-100 p-0.5 rounded-xl border border-gray-200 shadow-2xs shrink-0">
-              <button
-                onClick={() => handleSetViewMode('desktop')}
-                title="Desktop View"
-                className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer ${
-                  viewMode === 'desktop'
-                    ? 'bg-white text-emerald-800 shadow-xs'
-                    : 'text-gray-500 hover:text-gray-800'
-                }`}
-              >
-                <Monitor size={12} className="shrink-0" />
-                <span>Desktop</span>
-              </button>
-              <button
-                onClick={() => handleSetViewMode('mobile')}
-                title="Mobile View"
-                className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer ${
-                  viewMode === 'mobile'
-                    ? 'bg-white text-emerald-800 shadow-xs'
-                    : 'text-gray-500 hover:text-gray-800'
-                }`}
-              >
-                <Smartphone size={12} className="shrink-0" />
-                <span>Mobile</span>
-              </button>
-            </div>
-
-            <LanguageSelector variant="badge" />
-
-            {/* Notification Bell */}
-            <button
-              onClick={() => navigateToTab('activity')}
-              aria-label="Notifications"
-              className="relative p-1.5 sm:p-2 rounded-xl text-gray-600 hover:text-emerald-700 hover:bg-gray-100 transition cursor-pointer shrink-0"
-            >
-              <Bell size={16} />
-              {unreadAlertsCount > 0 && (
-                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white animate-pulse" />
-              )}
-            </button>
-
-            {/* User Avatar */}
-            <button
-              onClick={() => navigateToTab('profile')}
-              aria-label="User Profile"
-              className="p-0.5 rounded-full border-2 border-emerald-500/60 hover:border-emerald-600 transition cursor-pointer shrink-0"
-            >
-              <img
-                src={user?.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80'}
-                alt={user?.name || 'Profile'}
-                className="w-6 h-6 sm:w-7 sm:h-7 rounded-full object-cover"
-              />
-            </button>
-          </div>
-        </div>
-
-        {/* Dedicated 2-Person Quick Switch & Quick OTP Login Row */}
-        <UserPersonaSwitcher variant="row" />
-      </header>
-
-      {/* Main Page Content */}
-      <main className={`flex-1 w-full mx-auto pb-24 ${viewMode === 'desktop' && !isMobileFrame ? 'max-w-7xl px-4 py-6' : 'max-w-4xl px-3 sm:px-4 py-4'}`}>
-        {/* DESKTOP 2-COLUMN VIEW FOR FEED */}
-        {viewMode === 'desktop' && !isMobileFrame && currentScreen.type === 'tab' && currentScreen.tab === 'feed' ? (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            {/* Left 8 Columns: Main Feed */}
-            <div className="lg:col-span-8">
-              <Feed
-                onSelectProblem={(prob) =>
-                  setCurrentScreen({ type: 'problem_details', problemId: prob.id })
-                }
-                onNavigateToPost={() => navigateToTab('post')}
-                onNavigateToMap={() => navigateToTab('map')}
-              />
-            </div>
-
-            {/* Right 4 Columns: Desktop Civic Insights Panel */}
-            <div className="lg:col-span-4 space-y-5 sticky top-22">
-              {/* Quick Report CTA */}
-              <div className="p-5 rounded-2xl bg-linear-to-br from-emerald-800 to-teal-900 text-white shadow-lg space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl">📢</span>
-                  <Badge variant="success" size="sm">24/7 Redressal</Badge>
-                </div>
-                <h3 className="font-extrabold text-base">Spot a Civic Issue?</h3>
-                <p className="text-xs text-emerald-100 leading-relaxed">
-                  Report potholes, garbage dumps, water leaks, or streetlights. Field engineers receive alerts directly.
-                </p>
-                <Button
-                  variant="secondary"
-                  className="w-full text-xs font-bold py-2.5"
-                  onClick={() => navigateToTab('post')}
-                >
-                  <Plus size={16} />
-                  <span>Report Issue Now</span>
-                </Button>
-              </div>
-
-              {/* Civic Ward Statistics */}
-              <Card className="p-5 space-y-4">
-                <div className="flex items-center justify-between">
-                  <h4 className="font-bold text-sm text-gray-900 flex items-center gap-2">
-                    <TrendingUp size={16} className="text-emerald-600" />
-                    <span>Live Ward Metrics</span>
-                  </h4>
-                  <span className="text-[11px] text-gray-400">Maharashtra Metro</span>
-                </div>
-                <div className="grid grid-cols-2 gap-3 text-center">
-                  <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-100">
-                    <div className="text-xl font-extrabold text-emerald-800">142</div>
-                    <div className="text-[11px] font-medium text-emerald-700">Resolved Today</div>
-                  </div>
-                  <div className="p-3 rounded-xl bg-blue-50 border border-blue-100">
-                    <div className="text-xl font-extrabold text-blue-800">18</div>
-                    <div className="text-[11px] font-medium text-blue-700">In Progress</div>
-                  </div>
-                  <div className="p-3 rounded-xl bg-amber-50 border border-amber-100">
-                    <div className="text-xl font-extrabold text-amber-800">94.2%</div>
-                    <div className="text-[11px] font-medium text-amber-700">SLA On-Time</div>
-                  </div>
-                  <div className="p-3 rounded-xl bg-purple-50 border border-purple-100">
-                    <div className="text-xl font-extrabold text-purple-800">42 min</div>
-                    <div className="text-[11px] font-medium text-purple-700">Avg Response</div>
-                  </div>
-                </div>
-              </Card>
-
-              {/* Emergency Civic Helplines */}
-              <Card className="p-5 space-y-3">
-                <h4 className="font-bold text-sm text-gray-900 flex items-center gap-2">
-                  <PhoneCall size={16} className="text-emerald-600" />
-                  <span>Emergency Municipal Lines</span>
-                </h4>
-                <div className="space-y-2 text-xs text-gray-600">
-                  <div className="flex justify-between py-1 border-b border-gray-100">
-                    <span>Disaster Control</span>
-                    <strong className="text-gray-900">1916</strong>
-                  </div>
-                  <div className="flex justify-between py-1 border-b border-gray-100">
-                    <span>Water Supply Emergency</span>
-                    <strong className="text-gray-900">+91 22 2269 1234</strong>
-                  </div>
-                  <div className="flex justify-between py-1 border-b border-gray-100">
-                    <span>PWD & Roads Helpline</span>
-                    <strong className="text-gray-900">+91 22 2262 0530</strong>
-                  </div>
-                  <div className="flex justify-between py-1">
-                    <span>Solid Waste & Sanitation</span>
-                    <strong className="text-gray-900">+91 22 2413 4567</strong>
-                  </div>
-                </div>
-              </Card>
-
-              {/* Direct Mobile Link Banner */}
-              <div className="p-4 rounded-2xl bg-gray-100 border border-gray-200 text-xs text-gray-600 space-y-1.5">
-                <div className="font-bold text-gray-800 flex items-center gap-1.5">
-                  <Smartphone size={14} className="text-emerald-600" />
-                  <span>Open on Real Mobile</span>
-                </div>
-                <p className="text-[11px]">
-                  Visit <strong className="text-gray-900 font-mono">http://10.166.28.197:3000</strong> on your phone connected to the same Wi-Fi.
-                </p>
-              </div>
-            </div>
-          </div>
-        ) : (
-          /* STANDARD / MOBILE CONTAINER ROUTING */
-          <>
-            {currentScreen.type === 'tab' && currentScreen.tab === 'feed' && (
-              <Feed
-                onSelectProblem={(prob) =>
-                  setCurrentScreen({ type: 'problem_details', problemId: prob.id })
-                }
-                onNavigateToPost={() => navigateToTab('post')}
-                onNavigateToMap={() => navigateToTab('map')}
-              />
-            )}
-
-            {currentScreen.type === 'tab' && currentScreen.tab === 'map' && (
-              <MapView
-                onSelectProblem={(prob) =>
-                  setCurrentScreen({ type: 'problem_details', problemId: prob.id })
-                }
-                onNavigateToPost={() => navigateToTab('post')}
-              />
-            )}
-
-            {currentScreen.type === 'tab' && currentScreen.tab === 'post' && (
-              <PostProblem
-                initialData={postInitialData}
-                onSuccess={(newProb) => {
-                  setCurrentScreen({ type: 'problem_details', problemId: newProb.id });
-                  setPostInitialData(undefined);
-                }}
-              />
-            )}
-
-            {currentScreen.type === 'tab' && currentScreen.tab === 'activity' && (
-              <Activity
-                onSelectProblem={(prob) =>
-                  setCurrentScreen({ type: 'problem_details', problemId: prob.id })
-                }
-                onTrackProblem={(prob) =>
-                  setCurrentScreen({ type: 'problem_tracking', problem: prob })
-                }
-                onNavigateToPost={() => navigateToTab('post')}
-              />
-            )}
-
-            {currentScreen.type === 'tab' && currentScreen.tab === 'profile' && (
-              <Profile
-                onNavigateToGovTech={() => setCurrentScreen({ type: 'govtech_demo' })}
-                onNavigateToOfficerPortal={() => setCurrentScreen({ type: 'officer_dashboard' })}
-                onEditProfile={() => setCurrentScreen({ type: 'edit_profile' })}
-              />
-            )}
-
-            {currentScreen.type === 'problem_details' && (
-              <ProblemDetails
-                problemId={currentScreen.problemId}
-                onBack={() => setCurrentScreen({ type: 'tab', tab: 'feed' })}
-                onNavigateToMap={() => navigateToTab('map')}
-                onOpenChat={(prob) => setCurrentScreen({ type: 'chat', problem: prob })}
-              />
-            )}
-
-            {currentScreen.type === 'problem_tracking' && (
-              <ComplaintTracking
-                problem={currentScreen.problem}
-                onBack={() => setCurrentScreen({ type: 'tab', tab: 'activity' })}
-              />
-            )}
-
-            {currentScreen.type === 'officer_dashboard' && (
-              <OfficerDashboard
-                onSelectProblem={(prob) =>
-                  setCurrentScreen({ type: 'problem_details', problemId: prob.id })
-                }
-                onExitOfficerMode={() => setCurrentScreen({ type: 'tab', tab: 'profile' })}
-              />
-            )}
-
-            {currentScreen.type === 'govtech_demo' && (
-              <GovTechDemo onBack={() => setCurrentScreen({ type: 'tab', tab: 'profile' })} />
-            )}
-
-            {currentScreen.type === 'chat' && (
-              <ChatScreen
-                problem={currentScreen.problem}
-                onBack={() =>
-                  setCurrentScreen({ type: 'problem_details', problemId: currentScreen.problem.id })
-                }
-              />
-            )}
-
-            {currentScreen.type === 'edit_profile' && (
-              <EditProfile onBack={() => setCurrentScreen({ type: 'tab', tab: 'profile' })} />
-            )}
-          </>
-        )}
-      </main>
-
-      {/* Floating Voice Assistant Trigger (VoiceBotFAB) */}
-      <VoiceBotFAB
-        onClick={() => setIsVoiceModalOpen(true)}
-        className={
-          isMobileFrame
-            ? "absolute right-4 bottom-20 z-40 w-12 h-12 rounded-full bg-linear-to-r from-emerald-600 to-emerald-700 text-white shadow-xl shadow-emerald-700/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-all cursor-pointer ring-4 ring-emerald-500/20"
-            : undefined
-        }
-      />
-
-      {/* Voice Assistant Modal */}
-      <VoiceAssistantModal
-        isOpen={isVoiceModalOpen}
-        onClose={() => setIsVoiceModalOpen(false)}
-        onNavigateTab={(tabName) => {
-          if (['feed', 'map', 'post', 'activity', 'profile'].includes(tabName)) {
-            navigateToTab(tabName as TabType);
-          }
-        }}
-        onAutoFillReport={(data) => {
-          setPostInitialData(data);
-          navigateToTab('post');
-        }}
-      />
-
-      {/* Bottom Sticky Tab Navigation Bar */}
-      <nav className={`${isMobileFrame ? 'absolute' : 'fixed'} bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-gray-200/80 shadow-lg`}>
-        <div className="max-w-md mx-auto px-4 h-16 flex items-center justify-between relative">
-          {/* Feed */}
-          <button
-            onClick={() => navigateToTab('feed')}
-            className={`flex flex-col items-center justify-center flex-1 py-1 transition-all cursor-pointer ${
-              activeTab === 'feed'
-                ? 'text-emerald-700 font-bold'
-                : 'text-gray-400 hover:text-gray-600'
-            }`}
-          >
-            <Home size={20} className={activeTab === 'feed' ? 'stroke-[2.5]' : ''} />
-            <span className="text-[10px] mt-1">{t('tabFeed', 'Feed')}</span>
-          </button>
-
-          {/* Map */}
-          <button
-            onClick={() => navigateToTab('map')}
-            className={`flex flex-col items-center justify-center flex-1 py-1 transition-all cursor-pointer ${
-              activeTab === 'map'
-                ? 'text-emerald-700 font-bold'
-                : 'text-gray-400 hover:text-gray-600'
-            }`}
-          >
-            <MapIcon size={20} className={activeTab === 'map' ? 'stroke-[2.5]' : ''} />
-            <span className="text-[10px] mt-1">{t('tabMap', 'Civic Map')}</span>
-          </button>
-
-          {/* Elevated Center Post Button */}
-          <div className="flex-1 flex justify-center -mt-6">
-            <button
-              onClick={() => navigateToTab('post')}
-              className="w-14 h-14 rounded-full bg-linear-to-tr from-emerald-600 to-emerald-500 text-white shadow-lg shadow-emerald-700/35 flex items-center justify-center hover:scale-105 active:scale-95 transition-all ring-4 ring-white cursor-pointer"
-              aria-label="Post Civic Problem"
-            >
-              <Plus size={28} className="stroke-[2.5]" />
-            </button>
-          </div>
-
-          {/* Activity */}
-          <button
-            onClick={() => navigateToTab('activity')}
-            className={`flex flex-col items-center justify-center flex-1 py-1 transition-all relative cursor-pointer ${
-              activeTab === 'activity'
-                ? 'text-emerald-700 font-bold'
-                : 'text-gray-400 hover:text-gray-600'
-            }`}
-          >
-            <ActivityIcon size={20} className={activeTab === 'activity' ? 'stroke-[2.5]' : ''} />
-            <span className="text-[10px] mt-1">{t('tabActivity', 'Activity')}</span>
-            {unreadAlertsCount > 0 && (
-              <span className="absolute top-1 right-5 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center ring-2 ring-white">
-                {unreadAlertsCount}
-              </span>
-            )}
-          </button>
-
-          {/* Profile */}
-          <button
-            onClick={() => navigateToTab('profile')}
-            className={`flex flex-col items-center justify-center flex-1 py-1 transition-all cursor-pointer ${
-              activeTab === 'profile'
-                ? 'text-emerald-700 font-bold'
-                : 'text-gray-400 hover:text-gray-600'
-            }`}
-          >
-            <UserIcon size={20} className={activeTab === 'profile' ? 'stroke-[2.5]' : ''} />
-            <span className="text-[10px] mt-1">{t('tabProfile', 'Profile')}</span>
-          </button>
-        </div>
-      </nav>
-    </div>
-  );
-
-  // Check if current screen is desktop/laptop (>= 768px)
-  const isDesktopViewport = typeof window !== 'undefined' && window.innerWidth >= 768;
-
-  // If user is on a desktop computer AND clicked "Mobile View" to test mobile simulation:
-  if (viewMode === 'mobile' && isDesktopViewport) {
-    return (
-      <div className="min-h-screen bg-slate-900 py-6 px-4 flex flex-col items-center justify-start">
-        {/* Top Control Bar for desktop user */}
-        <div className="w-full max-w-md mb-3 flex items-center justify-between text-xs text-slate-300">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-semibold text-white">📱 Mobile View Simulation (390px)</span>
-          </div>
-          <button
-            onClick={() => handleSetViewMode('desktop')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold transition cursor-pointer border border-slate-700"
-          >
-            <Monitor size={14} />
-            <span>Switch to Desktop View</span>
-          </button>
-        </div>
-
-        {/* Clean, authentic mobile screen container (No fake chassis, no cutout covering header) */}
-        <div className="w-full max-w-[420px] min-h-[820px] bg-white rounded-3xl shadow-2xl border border-slate-700 overflow-hidden relative flex flex-col">
-          {renderAppContent(false)}
-        </div>
-      </div>
-    );
-  }
-
-  // Full-width native experience (for all real mobile devices, or desktop in Desktop view)
-  return renderAppContent(false);
-};
+import { BhandaraEvent, FilterState, UserLocation } from './types';
+import { eventService } from './services/eventService';
+import { getEventLiveStatus } from './utils/status';
+import { getDistanceFromLatLonInKm } from './utils/geo';
+import { Navbar } from './components/Navbar';
+import { Hero } from './components/Hero';
+import { FilterBar } from './components/FilterBar';
+import { EventCard } from './components/EventCard';
+import { EventDetailsModal } from './components/EventDetailsModal';
+import { SubmitEventModal } from './components/SubmitEventModal';
+import { ReportModal } from './components/ReportModal';
+import { AdminDashboard } from './components/AdminDashboard';
+import { Footer } from './components/Footer';
+import { ToastContainer, ToastMessage } from './components/Toast';
 
 export function App() {
+  // Events & Loading State
+  const [events, setEvents] = useState<BhandaraEvent[]>([]);
+  const [pendingCount, setPendingCount] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  // Filters State
+  const [filters, setFilters] = useState<FilterState>({
+    searchQuery: '',
+    category: 'all',
+    timeFilter: 'all',
+    locality: '',
+    sortBy: 'upcoming',
+  });
+
+  // Debounced search text
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+
+  // Geolocation State
+  const [userLocation, setUserLocation] = useState<UserLocation>({
+    latitude: null,
+    longitude: null,
+    isLoading: false,
+    error: null,
+  });
+
+  // Modals & Active Selections
+  const [selectedEvent, setSelectedEvent] = useState<BhandaraEvent | null>(null);
+  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState<boolean>(false);
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState<boolean>(false);
+  const [reportingEvent, setReportingEvent] = useState<BhandaraEvent | null>(null);
+
+  // Toast feedback
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
+
+  const addToast = (message: string, type: 'success' | 'info' | 'error' = 'info') => {
+    const newToast: ToastMessage = {
+      id: `toast-${Date.now()}-${Math.random()}`,
+      message,
+      type,
+    };
+    setToasts((prev) => [...prev, newToast]);
+  };
+
+  const removeToast = (id: string) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  // Debounce search query
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(filters.searchQuery);
+    }, 250);
+    return () => clearTimeout(handler);
+  }, [filters.searchQuery]);
+
+  // Load events & listen to updates from eventService
+  const loadData = async () => {
+    setIsLoading(true);
+    try {
+      const [approved, pending] = await Promise.all([
+        eventService.getApprovedEvents(),
+        eventService.getPendingEvents(),
+      ]);
+      setEvents(approved);
+      setPendingCount(pending.length);
+    } catch (err) {
+      console.error('Error fetching events:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+    const unsubscribe = eventService.subscribe(() => {
+      loadData();
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // Request user Geolocation only upon explicit button click
+  const handleRequestLocation = () => {
+    if (!navigator.geolocation) {
+      setUserLocation({
+        latitude: null,
+        longitude: null,
+        isLoading: false,
+        error: 'Geolocation is not supported by your browser.',
+      });
+      return;
+    }
+
+    setUserLocation((prev) => ({ ...prev, isLoading: true, error: null }));
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude, accuracy } = pos.coords;
+        setUserLocation({
+          latitude,
+          longitude,
+          accuracy,
+          isLoading: false,
+          error: null,
+        });
+        // Switch sort to nearest automatically
+        setFilters((prev) => ({ ...prev, sortBy: 'nearest' }));
+        addToast('Acquired location! Showing nearest Bhandara events.', 'success');
+      },
+      (err) => {
+        let msg = 'Could not access location.';
+        if (err.code === err.PERMISSION_DENIED) {
+          msg = 'Location permission was denied. You can search manually by locality.';
+        } else if (err.code === err.TIMEOUT) {
+          msg = 'Location request timed out. Please try again.';
+        }
+        setUserLocation({
+          latitude: null,
+          longitude: null,
+          isLoading: false,
+          error: msg,
+        });
+      },
+      { timeout: 10000, enableHighAccuracy: true }
+    );
+  };
+
+  const handleClearLocation = () => {
+    setUserLocation({
+      latitude: null,
+      longitude: null,
+      isLoading: false,
+      error: null,
+    });
+    if (filters.sortBy === 'nearest') {
+      setFilters((prev) => ({ ...prev, sortBy: 'upcoming' }));
+    }
+    addToast('GPS location cleared.', 'info');
+  };
+
+  // Filter and sort events
+  const processedEvents = useMemo(() => {
+    const todayStr = new Date().toISOString().split('T')[0];
+
+    // Calculate distance for all events if GPS coordinates are present
+    const withDistances = events.map((event) => {
+      let distance_km: number | undefined = undefined;
+      if (
+        userLocation.latitude !== null &&
+        userLocation.longitude !== null &&
+        event.latitude &&
+        event.longitude
+      ) {
+        distance_km = getDistanceFromLatLonInKm(
+          userLocation.latitude,
+          userLocation.longitude,
+          event.latitude,
+          event.longitude
+        );
+      }
+      return { ...event, distance_km };
+    });
+
+    // Apply Filters
+    const filtered = withDistances.filter((event) => {
+      const liveStatus = getEventLiveStatus(event);
+
+      // Search Query filter (title, locality, venue, address, menu, organizer)
+      if (debouncedSearch.trim()) {
+        const q = debouncedSearch.toLowerCase();
+        const matchesText =
+          event.title.toLowerCase().includes(q) ||
+          event.locality.toLowerCase().includes(q) ||
+          event.venue_name.toLowerCase().includes(q) ||
+          event.address.toLowerCase().includes(q) ||
+          event.menu_details.toLowerCase().includes(q) ||
+          event.organizer_name.toLowerCase().includes(q);
+
+        if (!matchesText) return false;
+      }
+
+      // Category filter
+      if (filters.category !== 'all' && event.category !== filters.category) {
+        return false;
+      }
+
+      // Time / Status filter
+      if (filters.timeFilter === 'today') {
+        if (event.event_date !== todayStr) return false;
+      } else if (filters.timeFilter === 'currently_serving') {
+        if (liveStatus !== 'currently_serving') return false;
+      } else if (filters.timeFilter === 'upcoming') {
+        if (liveStatus !== 'upcoming') return false;
+      } else if (filters.timeFilter === 'completed') {
+        if (liveStatus !== 'completed') return false;
+      }
+
+      // Locality filter
+      if (filters.locality && event.locality !== filters.locality) {
+        return false;
+      }
+
+      return true;
+    });
+
+    // Apply Sorting
+    return filtered.sort((a, b) => {
+      if (filters.sortBy === 'nearest') {
+        if (a.distance_km !== undefined && b.distance_km !== undefined) {
+          return a.distance_km - b.distance_km;
+        }
+        if (a.distance_km !== undefined) return -1;
+        if (b.distance_km !== undefined) return 1;
+      }
+
+      if (filters.sortBy === 'recently_added') {
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      }
+
+      // Default: Upcoming date & time
+      const dateDiff = a.event_date.localeCompare(b.event_date);
+      if (dateDiff !== 0) return dateDiff;
+      return a.start_time.localeCompare(b.start_time);
+    });
+  }, [events, debouncedSearch, filters, userLocation]);
+
+  // Check if any filters are active
+  const hasActiveFilters = useMemo(() => {
+    return (
+      filters.searchQuery !== '' ||
+      filters.category !== 'all' ||
+      filters.timeFilter !== 'all' ||
+      filters.locality !== '' ||
+      filters.sortBy !== 'upcoming' ||
+      userLocation.latitude !== null
+    );
+  }, [filters, userLocation]);
+
+  const handleResetFilters = () => {
+    setFilters({
+      searchQuery: '',
+      category: 'all',
+      timeFilter: 'all',
+      locality: '',
+      sortBy: 'upcoming',
+    });
+    handleClearLocation();
+  };
+
+  // Find events currently serving right now
+  const currentlyServingEvents = useMemo(() => {
+    return events.filter((e) => getEventLiveStatus(e) === 'currently_serving');
+  }, [events]);
+
   return (
-    <LanguageProvider>
-      <AuthProvider>
-        <MainContent />
-      </AuthProvider>
-    </LanguageProvider>
+    <div className="min-h-screen flex flex-col bg-[#FDFBF7] selection:bg-orange-200 selection:text-orange-950">
+      {/* 1. Responsive Navbar */}
+      <Navbar
+        onOpenSubmitModal={() => setIsSubmitModalOpen(true)}
+        onOpenAdminModal={() => setIsAdminModalOpen(true)}
+        totalListingsCount={events.length}
+      />
+
+      {/* 2. Hero Section */}
+      <Hero
+        searchQuery={filters.searchQuery}
+        onSearchChange={(query) => setFilters((prev) => ({ ...prev, searchQuery: query }))}
+        userLocation={userLocation}
+        onRequestLocation={handleRequestLocation}
+        onClearLocation={handleClearLocation}
+        onOpenSubmitModal={() => setIsSubmitModalOpen(true)}
+        totalApprovedEvents={events.length}
+      />
+
+      {/* 3. Filter Bar */}
+      <FilterBar
+        filters={filters}
+        onFilterChange={(newFilters) => setFilters((prev) => ({ ...prev, ...newFilters }))}
+        onResetFilters={handleResetFilters}
+        totalFilteredCount={processedEvents.length}
+        hasActiveFilters={hasActiveFilters}
+        hasLocation={userLocation.latitude !== null}
+      />
+
+      {/* Main Content Area */}
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-10 w-full">
+        {/* Currently Serving Live Highlight Banner (if any) */}
+        {currentlyServingEvents.length > 0 && filters.timeFilter !== 'currently_serving' && (
+          <div className="bg-gradient-to-r from-emerald-500/10 via-amber-500/10 to-orange-500/10 border border-emerald-300/60 rounded-3xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
+            <div className="flex items-center space-x-3.5">
+              <div className="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-600/30">
+                <span className="w-3 h-3 rounded-full bg-white pulse-serving" />
+              </div>
+              <div>
+                <div className="flex items-center space-x-2">
+                  <h3 className="font-extrabold text-sm sm:text-base text-emerald-950 font-['Outfit']">
+                    Currently Serving Mahaprasad Right Now!
+                  </h3>
+                  <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full border border-emerald-200">
+                    Live
+                  </span>
+                </div>
+                <p className="text-xs text-stone-600">
+                  {currentlyServingEvents.length} community {currentlyServingEvents.length === 1 ? 'feast is' : 'feasts are'} actively distributing Prasad in Amravati.
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setFilters((prev) => ({ ...prev, timeFilter: 'currently_serving' }))}
+              className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-all cursor-pointer whitespace-nowrap self-end sm:self-center"
+            >
+              View Serving Now &rarr;
+            </button>
+          </div>
+        )}
+
+        {/* Section Heading & Context */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-orange-100 pb-4">
+          <div>
+            <div className="flex items-center space-x-2 text-xs font-bold text-orange-700 uppercase tracking-wider mb-1">
+              <Flame className="w-4 h-4 fill-orange-600 text-orange-600" />
+              <span>Amravati Seva Directory</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#291809] font-['Outfit'] tracking-tight">
+              {filters.timeFilter === 'currently_serving'
+                ? 'Currently Serving Events in Amravati'
+                : filters.timeFilter === 'today'
+                ? 'Mahaprasad & Bhandaras Today'
+                : filters.timeFilter === 'upcoming'
+                ? 'Upcoming Bhandara Events'
+                : 'All Verified Community Meals'}
+            </h2>
+          </div>
+
+          <div className="text-xs text-stone-500 font-medium">
+            Showing {processedEvents.length} of {events.length} verified listings
+          </div>
+        </div>
+
+        {/* Loading State */}
+        {isLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+            {[1, 2, 3].map((n) => (
+              <div key={n} className="bg-white rounded-3xl h-96 border border-stone-200/80 p-4 space-y-4">
+                <div className="h-48 bg-stone-200 rounded-2xl" />
+                <div className="h-4 bg-stone-200 rounded w-3/4" />
+                <div className="h-4 bg-stone-200 rounded w-1/2" />
+                <div className="h-12 bg-stone-100 rounded-xl" />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Empty States */}
+        {!isLoading && processedEvents.length === 0 && (
+          <div className="bg-white border border-orange-100 rounded-3xl p-8 sm:p-14 text-center max-w-xl mx-auto space-y-5 shadow-sm">
+            <div className="w-16 h-16 rounded-3xl bg-orange-100 text-orange-600 flex items-center justify-center mx-auto shadow-md shadow-orange-600/15">
+              <Flame className="w-8 h-8 fill-orange-600 text-orange-600" />
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="text-xl sm:text-2xl font-bold font-['Outfit'] text-[#291809]">
+                {events.length === 0
+                  ? "No Bhandara Locations Listed Yet"
+                  : "No Bhandaras Found Matching Your Filters"}
+              </h3>
+              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed max-w-md mx-auto">
+                {events.length === 0
+                  ? "This website is dedicated for anyone to find and upload Bhandara, J1 community meal, and Mahaprasad locations. Be the first to list a Bhandara in your area!"
+                  : hasActiveFilters
+                  ? "No Bhandara matches your current search or locality filter. Try clearing filters or list a new Bhandara location!"
+                  : "No events are currently listed in this category. Anyone can upload a Bhandara location!"}
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+              {hasActiveFilters && (
+                <button
+                  onClick={handleResetFilters}
+                  className="w-full sm:w-auto inline-flex items-center justify-center space-x-1.5 px-4 py-2.5 rounded-xl text-xs font-bold text-stone-700 bg-stone-100 hover:bg-stone-200 transition-colors cursor-pointer"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Clear All Filters</span>
+                </button>
+              )}
+
+              <button
+                onClick={() => setIsSubmitModalOpen(true)}
+                className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 shadow-md shadow-orange-600/25 transition-all cursor-pointer transform hover:-translate-y-0.5"
+              >
+                <PlusCircle className="w-4 h-4" />
+                <span>+ Upload Bhandara Location Now</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Event Cards Grid */}
+        {!isLoading && processedEvents.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+            {processedEvents.map((event) => (
+              <EventCard
+                key={event.id}
+                event={event}
+                onSelectEvent={(e) => setSelectedEvent(e)}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Add Bhandara Callout Banner */}
+        <div className="bg-gradient-to-tr from-amber-700 via-orange-600 to-amber-600 rounded-3xl p-6 sm:p-10 text-white shadow-xl shadow-orange-950/10 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+          <div className="space-y-2 text-center md:text-left z-10">
+            <span className="text-amber-200 text-xs font-bold uppercase tracking-wider block">
+              Mandal & Volunteer Invitation
+            </span>
+            <h3 className="text-2xl sm:text-3xl font-bold font-['Outfit']">
+              Know of an Upcoming Bhandara in Amravati?
+            </h3>
+            <p className="text-xs sm:text-sm text-orange-100 max-w-xl leading-relaxed">
+              Help fellow devotees and citizens reach the venue. Share the date, timing, and prasad menu for verification by our moderation team.
+            </p>
+          </div>
+
+          <button
+            onClick={() => setIsSubmitModalOpen(true)}
+            className="shrink-0 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-orange-950 bg-white hover:bg-orange-50 shadow-lg transition-transform hover:scale-105 cursor-pointer z-10"
+          >
+            + Add a Bhandara Now
+          </button>
+        </div>
+      </main>
+
+      {/* 4. Footer */}
+      <Footer
+        onOpenSubmitModal={() => setIsSubmitModalOpen(true)}
+        onOpenAdminModal={() => setIsAdminModalOpen(true)}
+      />
+
+      {/* 5. Modals */}
+      {selectedEvent && (
+        <EventDetailsModal
+          event={selectedEvent}
+          onClose={() => setSelectedEvent(null)}
+          onOpenReportModal={(ev) => setReportingEvent(ev)}
+          onShowToast={addToast}
+        />
+      )}
+
+      <SubmitEventModal
+        isOpen={isSubmitModalOpen}
+        onClose={() => setIsSubmitModalOpen(false)}
+        onEventSubmitted={() => {
+          loadData();
+        }}
+        onShowToast={addToast}
+      />
+
+      <ReportModal
+        event={reportingEvent}
+        isOpen={reportingEvent !== null}
+        onClose={() => setReportingEvent(null)}
+        onShowToast={addToast}
+      />
+
+      <AdminDashboard
+        isOpen={isAdminModalOpen}
+        onClose={() => {
+          setIsAdminModalOpen(false);
+          loadData();
+        }}
+        onShowToast={addToast}
+      />
+
+      {/* 6. Toast Notifications */}
+      <ToastContainer toasts={toasts} onDismiss={removeToast} />
+    </div>
   );
 }
 

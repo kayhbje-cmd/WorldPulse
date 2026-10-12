@@ -8,3 +8,4 @@ coverage/
 !.env.example
 cloudflared.exe
 .data_problems.json
+.data_*.json
