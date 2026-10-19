@@ -2,26 +2,54 @@
 
 @layer base {
   :root {
-    --color-saffron: #ea580c;
-    --color-saffron-light: #fff7ed;
-    --color-saffron-dark: #9a3412;
-    --color-cream: #fdfbf7;
-    --color-espresso: #291809;
+    --color-gold: #d4af37;
+    --color-gold-light: #f5e6a3;
+    --color-gold-dark: #997b2f;
+    --color-charcoal-base: #090a0f;
+    --color-charcoal-card: #11141c;
+    --color-charcoal-elevated: #181d28;
+    --color-charcoal-border: rgba(255, 255, 255, 0.08);
   }
 
   body {
     -webkit-tap-highlight-color: transparent;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-    background-color: #fdfbf7;
-    color: #291809;
+    background-color: #090a0f;
+    color: #f1f5f9;
+    overflow-x: hidden;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
+  h1, h2, h3, .font-serif-headline {
+    font-family: 'Playfair Display', Georgia, Cambria, serif;
+    letter-spacing: -0.015em;
+  }
+
+  .font-brand {
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.12em;
   }
 }
 
-/* Custom scrollbar for horizontal chips */
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #090a0f;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #232a3b;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d4af37;
+}
+
+/* Hide scrollbar for clean chip row */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -30,32 +58,99 @@
   scrollbar-width: none;
 }
 
-/* Pulsing beacon for Currently Serving live status */
-@keyframes pulse-saffron {
+/* Pulse animation for Breaking News & Live indicators */
+@keyframes pulse-gold {
   0% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.7);
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7);
   }
   70% {
     transform: scale(1);
-    box-shadow: 0 0 0 10px rgba(234, 88, 12, 0);
+    box-shadow: 0 0 0 8px rgba(212, 175, 55, 0);
   }
   100% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(234, 88, 12, 0);
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
   }
 }
 
-.pulse-serving {
-  animation: pulse-saffron 2s infinite cubic-bezier(0.45, 0, 0.55, 1);
+.pulse-gold {
+  animation: pulse-gold 2s infinite cubic-bezier(0.45, 0, 0.55, 1);
 }
 
-/* Subtle card hover transition */
-.bhandara-card-hover {
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+/* Marquee for Breaking / Market ticker */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
-.bhandara-card-hover:hover {
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Luxury card hover styling */
+.editorial-card {
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease;
+}
+
+.editorial-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 16px 32px -8px rgba(154, 52, 18, 0.12), 0 4px 12px -2px rgba(41, 24, 9, 0.04);
+  box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.6), 0 0 20px -5px rgba(212, 175, 55, 0.12);
+  border-color: rgba(212, 175, 55, 0.35);
 }
 
+/* Shimmer animation for skeleton loaders */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: #161b24;
+}
+
+.skeleton-shimmer::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.05) 20%,
+    rgba(212, 175, 55, 0.08) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 1.8s infinite;
+  content: '';
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: rgba(17, 20, 28, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-gold {
+  background: rgba(22, 26, 36, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(212, 175, 55, 0.22);
+}

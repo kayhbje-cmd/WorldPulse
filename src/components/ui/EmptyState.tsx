@@ -1,34 +1,36 @@
-// src/components/ui/EmptyState.tsx
 import React from 'react';
-import { Button } from './Button';
+import { Newspaper, Search, RotateCcw } from 'lucide-react';
 
 interface EmptyStateProps {
-  icon?: React.ReactNode;
-  title: string;
-  description?: string;
-  actionText?: string;
-  onAction?: () => void;
+  searchQuery?: string;
+  categoryName?: string;
+  onReset: () => void;
 }
 
-export const EmptyState: React.FC<EmptyStateProps> = ({
-  icon,
-  title,
-  description,
-  actionText,
-  onAction,
-}) => {
+export const EmptyState: React.FC<EmptyStateProps> = ({ searchQuery, categoryName, onReset }) => {
   return (
-    <div className="flex flex-col items-center justify-center p-8 text-center max-w-sm mx-auto my-6 bg-white/70 backdrop-blur-xs rounded-3xl border border-dashed border-gray-200">
-      <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3 text-2xl">
-        {icon || '🎉'}
+    <div className="flex flex-col items-center justify-center p-12 text-center bg-[#11141c] border border-white/5 rounded-2xl my-8">
+      <div className="w-16 h-16 rounded-full bg-[#181d28] flex items-center justify-center mb-4 border border-white/10 text-[#d4af37]">
+        {searchQuery ? <Search className="w-8 h-8" /> : <Newspaper className="w-8 h-8" />}
       </div>
-      <h3 className="text-base font-bold text-gray-800">{title}</h3>
-      {description && <p className="text-xs text-gray-500 mt-1.5 leading-relaxed">{description}</p>}
-      {actionText && onAction && (
-        <Button variant="primary" size="sm" className="mt-4" onClick={onAction}>
-          {actionText}
-        </Button>
-      )}
+
+      <h3 className="text-xl font-serif text-white mb-2">
+        {searchQuery ? `No dispatches found for "${searchQuery}"` : `No articles available in ${categoryName || 'this section'}`}
+      </h3>
+
+      <p className="text-slate-400 max-w-md text-sm mb-6 leading-relaxed">
+        {searchQuery
+          ? 'Check your spelling or try broader search terms such as "economy", "technology", "diplomacy", or "space".'
+          : 'Our international wire monitors have not received dispatches for this specific category in the current cycle.'}
+      </p>
+
+      <button
+        onClick={onReset}
+        className="flex items-center gap-2 px-5 py-2.5 bg-[#d4af37] hover:bg-[#e5c07b] text-neutral-950 font-semibold rounded-lg text-sm transition-all active:scale-95 cursor-pointer shadow-lg shadow-[#d4af37]/10"
+      >
+        <RotateCcw className="w-4 h-4" />
+        <span>Return to Top Stories</span>
+      </button>
     </div>
   );
 };

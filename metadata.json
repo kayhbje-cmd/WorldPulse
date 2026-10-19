@@ -1,6 +1,6 @@
 {
-  "name": "JanMitra - Citizen Civic Portal",
-  "description": "Multilingual citizen complaint and civic issue reporting platform with real-time tracking, interactive maps, voice assistant, and government officer resolution.",
-  "requestFramePermissions": ["geolocation"],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "name": "WorldPulse - Global Intelligence & International Journalism",
+  "description": "Premium international editorial news publication platform covering global affairs, India, technology, finance, business, science, sports, entertainment, health, and politics with live syndicated feeds.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
 }

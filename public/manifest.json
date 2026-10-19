@@ -1,53 +1,13 @@
 {
   "id": "/",
-  "name": "JanMitra - Citizen Civic Portal",
-  "short_name": "JanMitra",
-  "description": "Report, track, and resolve civic issues in your community",
-  "theme_color": "#16A34A",
-  "background_color": "#FFFFFF",
+  "name": "WorldPulse - Global Intelligence & International Journalism",
+  "short_name": "WorldPulse",
+  "description": "Premium international editorial news publication platform covering global affairs, India, technology, finance, business, science, sports, entertainment, health, and politics with live syndicated feeds.",
+  "theme_color": "#090a0f",
+  "background_color": "#090a0f",
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
-  "orientation": "portrait",
-  "icons": [
-    {
-      "src": "/icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon.svg",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "maskable"
-    }
-  ],
-  "categories": ["government", "social", "utilities"],
-  "shortcuts": [
-    {
-      "name": "Report Problem",
-      "short_name": "Post",
-      "description": "Report a new civic issue",
-      "url": "/?tab=post"
-    },
-    {
-      "name": "Civic Map",
-      "short_name": "Map",
-      "description": "View civic complaints near you",
-      "url": "/?tab=map"
-    },
-    {
-      "name": "My Activity",
-      "short_name": "Activity",
-      "description": "View your tracked complaints",
-      "url": "/?tab=activity"
-    }
-  ]
+  "orientation": "any",
+  "categories": ["news", "magazines", "business"]
 }

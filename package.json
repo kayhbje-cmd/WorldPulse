@@ -1,7 +1,8 @@
 {
-  "name": "bhandara-finder",
+  "name": "worldpulse-news",
   "private": true,
   "version": "1.0.0",
+  "description": "WorldPulse - Premium International News Platform covering Global Affairs, India, Technology, Business, Finance, Science, Sports, Health, Politics",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,6 +15,7 @@
     "@tailwindcss/vite": "^4.3.3",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
+    "fast-xml-parser": "^5.11.2",
     "lucide-react": "^0.546.0",
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
