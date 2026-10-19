@@ -29,10 +29,10 @@ export const AboutPage: React.FC<AboutPageProps> = ({
   return (
     <div className="space-y-16 animate-in fade-in duration-300">
       {/* Breadcrumb & Navigation Header */}
-      <div className="flex items-center justify-between pb-6 border-b border-white/10">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-white/10">
         <button
           onClick={onBackToNews}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 hover:text-white transition-all cursor-pointer group"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 hover:text-white transition-all cursor-pointer group min-h-[38px]"
         >
           <ArrowLeft className="w-4 h-4 text-[#d4af37] group-hover:-translate-x-1 transition-transform" />
           <span>Back to Live News Wire</span>
@@ -44,7 +44,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
       </div>
 
       {/* Hero Header */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#121622] via-[#0d1017] to-[#090a0f] border border-white/10 p-8 sm:p-14 text-center sm:text-left shadow-2xl">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#121622] via-[#0d1017] to-[#090a0f] border border-white/10 p-5 sm:p-14 text-center sm:text-left shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#d4af37]/5 rounded-full blur-3xl pointer-events-none" />
         
         <div className="max-w-3xl space-y-6 relative z-10">

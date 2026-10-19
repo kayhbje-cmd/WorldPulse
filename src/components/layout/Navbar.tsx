@@ -12,6 +12,7 @@ import {
   Info,
   Mail,
   Home,
+  Briefcase,
 } from 'lucide-react';
 import { EditionType, CategoryId, ActiveView } from '../../types/news';
 import { CATEGORIES } from '../../data/categories';
@@ -98,27 +99,27 @@ export const Navbar: React.FC<NavbarProps> = ({
           <span className="text-white/20 hidden sm:inline">|</span>
 
           {/* Rotating World Clock */}
-          <div className="flex items-center gap-1.5 text-slate-300">
-            <Clock className="w-3.5 h-3.5 text-[#d4af37]" />
-            <span className="font-semibold text-slate-200">{currentClock.city}:</span>
-            <span className="font-mono text-[11px] text-[#f5e6a3]">
+          <div className="flex items-center gap-1.5 text-slate-300 min-w-0">
+            <Clock className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
+            <span className="font-semibold text-slate-200 truncate max-w-[70px] xs:max-w-none">{currentClock.city}:</span>
+            <span className="font-mono text-[11px] text-[#f5e6a3] shrink-0">
               {getFormattedCityTime(currentClock.timeZone, currentTime)} {currentClock.code}
             </span>
           </div>
         </div>
 
         {/* Edition Selector & Reading Tools */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {/* Edition Selector */}
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setEditionDropdownOpen((prev) => !prev)}
               aria-label="Select news edition"
-              className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 text-xs transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-2 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 text-xs transition-colors cursor-pointer min-h-[30px]"
             >
-              <Globe className="w-3.5 h-3.5 text-[#d4af37]" />
-              <span className="font-medium capitalize">{editions.find((e) => e.id === currentEdition)?.label}</span>
-              <ChevronDown className="w-3 h-3 text-slate-400" />
+              <Globe className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
+              <span className="font-medium capitalize truncate max-w-[80px] xs:max-w-none">{editions.find((e) => e.id === currentEdition)?.label}</span>
+              <ChevronDown className="w-3 h-3 text-slate-400 shrink-0" />
             </button>
 
             {editionDropdownOpen && (
@@ -159,12 +160,12 @@ export const Navbar: React.FC<NavbarProps> = ({
       </div>
 
       {/* Main Masthead / Logo Area */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3.5 sm:py-6 flex items-center justify-between gap-2 sm:gap-4">
         {/* Left: Mobile hamburger */}
-        <div className="flex items-center md:hidden">
+        <div className="flex items-center md:hidden shrink-0">
           <button
             onClick={() => setMobileMenuOpen((prev) => !prev)}
-            className="p-2 text-slate-300 hover:text-white rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
+            className="p-2 min-w-[40px] min-h-[40px] flex items-center justify-center text-slate-300 hover:text-white rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -172,30 +173,35 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Center: Luxury Editorial Brand Logo */}
-        <div className="flex-1 md:flex-initial text-center md:text-left">
+        <div className="flex-1 md:flex-initial text-center md:text-left min-w-0">
           <button
             onClick={() => {
               onNavigateView?.('home');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className="inline-block group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37] text-left cursor-pointer"
+            className="inline-block group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37] text-left cursor-pointer max-w-full"
           >
-            <div className="flex items-center justify-center md:justify-start gap-2.5">
-              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded bg-gradient-to-br from-[#d4af37] to-[#997b2f] flex items-center justify-center text-neutral-950 font-serif font-black text-base sm:text-lg shadow-lg shadow-[#d4af37]/20">
+            <div className="flex items-center justify-center md:justify-start gap-2 sm:gap-2.5">
+              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded bg-gradient-to-br from-[#d4af37] to-[#997b2f] flex items-center justify-center text-neutral-950 font-serif font-black text-sm sm:text-lg shadow-lg shadow-[#d4af37]/20 shrink-0">
                 W
               </div>
-              <h1 className="font-brand text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-wider text-white">
+              <h1 className="font-brand text-xl sm:text-3xl md:text-4xl font-extrabold tracking-wider text-white truncate">
                 WORLD<span className="text-[#d4af37] group-hover:text-[#f5e6a3] transition-colors">PULSE</span>
               </h1>
             </div>
-            <p className="text-[10px] sm:text-[11px] font-serif tracking-[0.25em] text-[#d4af37]/80 uppercase mt-1 text-center md:text-left">
+            {/* Desktop tagline */}
+            <p className="hidden sm:block text-[10px] sm:text-[11px] font-serif tracking-[0.25em] text-[#d4af37]/80 uppercase mt-1 text-center md:text-left">
               The Pulse of Global Affairs &bull; International Intelligence
+            </p>
+            {/* Mobile compact tagline */}
+            <p className="sm:hidden text-[9px] font-serif tracking-[0.16em] text-[#d4af37]/80 uppercase mt-0.5 text-center truncate">
+              Global Affairs &bull; Intelligence
             </p>
           </button>
         </div>
 
         {/* Right: View Navigation, Search & Bookmarks */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           {/* Desktop Editorial Navigation Links */}
           <nav className="hidden md:flex items-center gap-1 mr-1" aria-label="Main Editorial Views">
             <button
@@ -207,6 +213,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               Live Wire
+            </button>
+            <button
+              onClick={() => onNavigateView?.('portfolio')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                currentView === 'portfolio'
+                  ? 'text-[#d4af37] bg-[#d4af37]/10 border border-[#d4af37]/30'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent'
+              }`}
+            >
+              Portfolio
             </button>
             <button
               onClick={() => onNavigateView?.('about')}
@@ -234,7 +250,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             onClick={onOpenSearch}
             aria-label="Search news wire"
-            className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-[#141824] hover:bg-[#1a2030] text-slate-300 hover:text-white border border-white/10 hover:border-[#d4af37]/40 transition-all text-xs cursor-pointer shadow-sm group"
+            className="flex items-center gap-2 p-2 sm:px-4 sm:py-2 rounded-lg bg-[#141824] hover:bg-[#1a2030] text-slate-300 hover:text-white border border-white/10 hover:border-[#d4af37]/40 transition-all text-xs cursor-pointer shadow-sm group min-w-[38px] min-h-[38px] justify-center"
           >
             <Search className="w-4 h-4 text-[#d4af37] group-hover:scale-110 transition-transform" />
             <span className="hidden sm:inline">Search Wire...</span>
@@ -248,7 +264,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={onOpenBookmarks}
             aria-label={`View saved articles, ${bookmarkCount} saved`}
             title="Saved Reading List"
-            className="relative flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#141824] hover:bg-[#1a2030] text-slate-300 hover:text-white border border-white/10 hover:border-[#d4af37]/40 transition-all text-xs cursor-pointer"
+            className="relative flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 rounded-lg bg-[#141824] hover:bg-[#1a2030] text-slate-300 hover:text-white border border-white/10 hover:border-[#d4af37]/40 transition-all text-xs cursor-pointer min-w-[38px] min-h-[38px] justify-center"
           >
             <Bookmark className="w-4 h-4 text-[#d4af37]" />
             <span className="hidden md:inline font-medium">Saved</span>
@@ -265,7 +281,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-white/10 bg-[#0d0f15] px-4 py-5 space-y-5 animate-in slide-in-from-top duration-200">
           {/* Mobile View Navigation */}
-          <div className="grid grid-cols-3 gap-2 pb-2 border-b border-white/10">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pb-2 border-b border-white/10">
             <button
               onClick={() => {
                 onNavigateView?.('home');
@@ -279,6 +295,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <Home className="w-3.5 h-3.5 text-[#d4af37]" />
               <span>Live Wire</span>
+            </button>
+            <button
+              onClick={() => {
+                onNavigateView?.('portfolio');
+                setMobileMenuOpen(false);
+              }}
+              className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-semibold border cursor-pointer ${
+                currentView === 'portfolio'
+                  ? 'bg-[#d4af37]/20 border-[#d4af37] text-[#f5e6a3]'
+                  : 'bg-white/5 border-white/10 text-slate-300'
+              }`}
+            >
+              <Briefcase className="w-3.5 h-3.5 text-[#d4af37]" />
+              <span>Portfolio</span>
             </button>
             <button
               onClick={() => {

@@ -37,8 +37,8 @@ const ICON_MAP: Record<string, React.ReactNode> = {
 export const CategoryBar: React.FC<CategoryBarProps> = ({ selectedCategory, onSelectCategory }) => {
   return (
     <div className="sticky top-0 z-30 bg-[#090a0f]/95 backdrop-blur-md border-b border-white/10 shadow-lg shadow-black/40">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <nav className="flex items-center space-x-1 sm:space-x-2 overflow-x-auto no-scrollbar py-2.5" aria-label="News categories">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6">
+        <nav className="flex items-center space-x-1.5 sm:space-x-2 overflow-x-auto no-scrollbar py-2 sm:py-2.5" aria-label="News categories">
           {CATEGORIES.map((cat) => {
             const isActive = selectedCategory === cat.id;
             return (
@@ -46,10 +46,10 @@ export const CategoryBar: React.FC<CategoryBarProps> = ({ selectedCategory, onSe
                 key={cat.id}
                 onClick={() => onSelectCategory(cat.id)}
                 aria-current={isActive ? 'page' : undefined}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-200 cursor-pointer shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37] ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-200 cursor-pointer shrink-0 min-h-[36px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37] ${
                   isActive
-                    ? 'bg-[#d4af37] text-neutral-950 font-semibold shadow-md shadow-[#d4af37]/20 scale-[1.02]'
-                    : 'text-slate-300 hover:text-white hover:bg-white/5 active:scale-95'
+                    ? 'bg-gradient-to-r from-[#d4af37] to-[#c59e2b] text-neutral-950 font-bold shadow-lg shadow-[#d4af37]/20 scale-[1.02]'
+                    : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 active:scale-95'
                 }`}
               >
                 <span className={isActive ? 'text-neutral-950' : 'text-[#d4af37]'}>

@@ -92,10 +92,10 @@ ${formData.message}
   return (
     <div className="space-y-12 animate-in fade-in duration-300">
       {/* Back button */}
-      <div className="flex items-center justify-between pb-6 border-b border-white/10">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-white/10">
         <button
           onClick={onBackToNews}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 hover:text-white transition-all cursor-pointer group"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 hover:text-white transition-all cursor-pointer group min-h-[38px]"
         >
           <ArrowLeft className="w-4 h-4 text-[#d4af37] group-hover:-translate-x-1 transition-transform" />
           <span>Back to Live News Wire</span>
@@ -107,14 +107,14 @@ ${formData.message}
       </div>
 
       {/* Header */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#121622] via-[#0d1017] to-[#090a0f] border border-white/10 p-8 sm:p-12 shadow-2xl">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#121622] via-[#0d1017] to-[#090a0f] border border-white/10 p-5 sm:p-12 shadow-2xl">
         <div className="max-w-2xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/30 text-[#d4af37] text-xs font-bold uppercase tracking-widest">
             <Mail className="w-3.5 h-3.5" />
             <span>Editorial Bureau &amp; Public Inquiries</span>
           </div>
 
-          <h1 className="font-serif text-3xl sm:text-4xl font-extrabold text-white leading-tight">
+          <h1 className="font-serif text-2xl sm:text-4xl font-extrabold text-white leading-tight">
             Connect with WorldPulse
           </h1>
 
@@ -127,7 +127,7 @@ ${formData.message}
       {/* Main Grid: Form + Bureau Information */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
         {/* Contact Form Container (7 cols) */}
-        <div className="lg:col-span-7 bg-[#11141c] border border-white/10 rounded-2xl sm:rounded-3xl p-6 sm:p-10 shadow-2xl space-y-6">
+        <div className="lg:col-span-7 bg-[#11141c] border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-10 shadow-2xl space-y-6">
           <div>
             <h2 className="font-serif text-xl sm:text-2xl font-bold text-white mb-1">
               Dispatch an Editorial Inquiry

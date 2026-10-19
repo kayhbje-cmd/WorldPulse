@@ -20,10 +20,10 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({ onBackToNews, onClearB
   return (
     <div className="space-y-12 animate-in fade-in duration-300 max-w-4xl mx-auto">
       {/* Top navigation */}
-      <div className="flex items-center justify-between pb-6 border-b border-white/10">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-white/10">
         <button
           onClick={onBackToNews}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 hover:text-white transition-all cursor-pointer group"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 hover:text-white transition-all cursor-pointer group min-h-[38px]"
         >
           <ArrowLeft className="w-4 h-4 text-[#d4af37] group-hover:-translate-x-1 transition-transform" />
           <span>Back to Live News Wire</span>
@@ -41,7 +41,7 @@ export const PrivacyPage: React.FC<PrivacyPageProps> = ({ onBackToNews, onClearB
           <span>Data Governance &amp; Reader Privacy</span>
         </div>
 
-        <h1 className="font-serif text-3xl sm:text-5xl font-black text-white leading-tight">
+        <h1 className="font-serif text-2xl sm:text-5xl font-black text-white leading-tight">
           WorldPulse Privacy &amp; Data Charter
         </h1>
 

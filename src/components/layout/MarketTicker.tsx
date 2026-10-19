@@ -21,7 +21,7 @@ export const MarketTicker: React.FC = () => {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      <div className="flex items-center gap-2 pr-4 border-r border-white/10 shrink-0 z-10 bg-[#090b10]">
+      <div className="flex items-center gap-1.5 sm:gap-2 pr-3 sm:pr-4 border-r border-white/10 shrink-0 z-10 bg-[#090b10]">
         <span className="flex h-2 w-2 relative">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#d4af37] opacity-75"></span>
           <span className="relative inline-flex rounded-full h-2 w-2 bg-[#d4af37]"></span>
@@ -32,7 +32,7 @@ export const MarketTicker: React.FC = () => {
         </span>
       </div>
 
-      <div className="relative overflow-hidden w-full ml-4">
+      <div className="relative overflow-hidden w-full ml-3 sm:ml-4">
         <div
           className={`flex items-center gap-6 whitespace-nowrap animate-marquee ${
             isPaused ? '[animation-play-state:paused]' : ''

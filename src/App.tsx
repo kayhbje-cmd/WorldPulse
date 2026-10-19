@@ -28,6 +28,7 @@ import { ShareModal } from './components/modals/ShareModal';
 import { AboutPage } from './components/pages/AboutPage';
 import { ContactPage } from './components/pages/ContactPage';
 import { PrivacyPage } from './components/pages/PrivacyPage';
+import { PortfolioPage } from './components/pages/PortfolioPage';
 
 export function App() {
   // Navigation & View States
@@ -37,6 +38,7 @@ export function App() {
       if (hash === '#about') return 'about';
       if (hash === '#contact') return 'contact';
       if (hash === '#privacy') return 'privacy';
+      if (hash === '#portfolio') return 'portfolio';
     }
     return 'home';
   });
@@ -78,6 +80,7 @@ export function App() {
       if (hash === '#about') setCurrentView('about');
       else if (hash === '#contact') setCurrentView('contact');
       else if (hash === '#privacy') setCurrentView('privacy');
+      else if (hash === '#portfolio') setCurrentView('portfolio');
       else setCurrentView('home');
     };
     window.addEventListener('hashchange', syncViewFromHash);
@@ -92,6 +95,8 @@ export function App() {
       document.title = 'WorldPulse | Contact Editorial Bureau & Communications';
     } else if (currentView === 'privacy') {
       document.title = 'WorldPulse | Reader Privacy & Data Governance Charter';
+    } else if (currentView === 'portfolio') {
+      document.title = 'WorldPulse | Web Development Portfolio & Services';
     } else if (searchQuery) {
       document.title = `WorldPulse | Search: "${searchQuery}"`;
     } else if (selectedCategory !== 'all') {
@@ -217,9 +222,9 @@ export function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Lead and secondary stories
+  // Lead and secondary stories (up to 5 secondary items in Key Global Developments)
   const leadStory = articles.find((a) => a.isFeatured) || articles[0];
-  const secondaryStories = articles.filter((a) => a.id !== leadStory?.id).slice(0, 3);
+  const secondaryStories = articles.filter((a) => a.id !== leadStory?.id).slice(0, 5);
   const remainingArticles = articles.filter(
     (a) => a.id !== leadStory?.id && !secondaryStories.some((s) => s.id === a.id)
   );
@@ -277,7 +282,7 @@ export function App() {
       )}
 
       {/* 5. Main Content Layout */}
-      <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 flex-1 w-full space-y-8">
+      <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 flex-1 w-full space-y-10 sm:space-y-14">
         {/* VIEW: About WorldPulse Page */}
         {currentView === 'about' && (
           <AboutPage
@@ -297,6 +302,14 @@ export function App() {
           <PrivacyPage
             onBackToNews={() => handleNavigateView('home')}
             onClearBookmarks={handleClearAllBookmarks}
+          />
+        )}
+
+        {/* VIEW: Web Development Portfolio Page */}
+        {currentView === 'portfolio' && (
+          <PortfolioPage
+            onBackToNews={() => handleNavigateView('home')}
+            onNavigateToContact={() => handleNavigateView('contact')}
           />
         )}
 
@@ -367,7 +380,7 @@ export function App() {
               </div>
 
               {/* Trending / Top 5 Sidebar (4 cols on desktop) */}
-              <div className="lg:col-span-4 sticky top-16">
+              <div className="lg:col-span-4 sticky top-20 self-start">
                 <TrendingSidebar
                   trendingArticles={articles.filter((a) => a.isTrending || a.isBreaking)}
                   onSelectArticle={(art) => setSelectedArticle(art)}

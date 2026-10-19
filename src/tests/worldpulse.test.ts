@@ -100,12 +100,13 @@ describe('WorldPulse Core Architecture & Features', () => {
     expect(storageService.isBookmarked('test-art-1')).toBe(false);
   });
 
-  it('should support view routing targets (home, about, contact, privacy)', () => {
-    const validViews = ['home', 'about', 'contact', 'privacy'];
-    expect(validViews.length).toBe(4);
+  it('should support view routing targets (home, about, contact, privacy, portfolio)', () => {
+    const validViews = ['home', 'about', 'contact', 'privacy', 'portfolio'];
+    expect(validViews.length).toBe(5);
     expect(validViews).toContain('about');
     expect(validViews).toContain('contact');
     expect(validViews).toContain('privacy');
+    expect(validViews).toContain('portfolio');
   });
 
   it('should guarantee transparent publisher citation without inventing authors or outlets', () => {

@@ -39,13 +39,13 @@ export const BookmarksDrawer: React.FC<BookmarksDrawerProps> = ({
       aria-label="Saved Articles Drawer"
       className="fixed inset-0 z-50 overflow-hidden bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
     >
-      <div className="absolute inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-[#11141c] border-l border-white/10 text-slate-100 flex flex-col shadow-2xl">
+      <div className="absolute inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10">
+        <div className="w-full sm:w-screen max-w-md bg-[#11141c] border-l border-white/10 text-slate-100 flex flex-col shadow-2xl">
           {/* Drawer Header */}
-          <div className="p-6 border-b border-white/10 flex items-center justify-between">
+          <div className="p-4 sm:p-6 border-b border-white/10 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Bookmark className="w-5 h-5 text-[#d4af37]" />
-              <h3 className="font-serif text-lg font-bold text-white">Saved Reading List</h3>
+              <h3 className="font-serif text-base sm:text-lg font-bold text-white">Saved Reading List</h3>
               <span className="px-2 py-0.5 rounded-full bg-[#d4af37]/20 text-[#f5e6a3] text-xs font-mono font-bold">
                 {savedArticles.length}
               </span>
@@ -54,14 +54,14 @@ export const BookmarksDrawer: React.FC<BookmarksDrawerProps> = ({
             <button
               onClick={onClose}
               aria-label="Close saved articles drawer"
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+              className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Drawer Body */}
-          <div className="p-6 flex-1 overflow-y-auto space-y-4">
+          <div className="p-4 sm:p-6 flex-1 overflow-y-auto space-y-4">
             {savedArticles.length === 0 ? (
               <div className="text-center py-16 space-y-4">
                 <div className="w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mx-auto text-[#d4af37]">
@@ -111,7 +111,7 @@ export const BookmarksDrawer: React.FC<BookmarksDrawerProps> = ({
                           onClick={() => onRemoveBookmark(article.id)}
                           aria-label={`Remove ${article.title} from bookmarks`}
                           title="Remove bookmark"
-                          className="p-1 text-slate-500 hover:text-rose-400 transition-colors cursor-pointer"
+                          className="p-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center rounded text-slate-500 hover:text-rose-400 hover:bg-white/5 transition-colors cursor-pointer"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>

@@ -2,11 +2,11 @@ import React from 'react';
 
 export const NewsCardSkeleton: React.FC = () => {
   return (
-    <div className="bg-[#11141c] border border-white/5 rounded-xl overflow-hidden flex flex-col h-full animate-pulse">
-      {/* Image Skeleton */}
-      <div className="w-full h-52 skeleton-shimmer bg-[#181d28]" />
+    <div className="bg-[#11141c] border border-white/10 rounded-2xl overflow-hidden flex flex-col h-full animate-pulse shadow-xl shadow-black/40">
+      {/* Image Skeleton matching 16:10 */}
+      <div className="w-full aspect-[16/10] skeleton-shimmer bg-[#181d28]" />
 
-      <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+      <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
         <div className="space-y-3">
           {/* Metadata pill skeleton */}
           <div className="flex items-center gap-2">
@@ -14,7 +14,7 @@ export const NewsCardSkeleton: React.FC = () => {
             <div className="w-24 h-4 bg-white/5 rounded" />
           </div>
 
-          {/* Title skeleton */}
+          {/* Title skeleton matching 2 lines */}
           <div className="w-full h-5 bg-white/10 rounded" />
           <div className="w-4/5 h-5 bg-white/10 rounded" />
 
@@ -35,9 +35,9 @@ export const NewsCardSkeleton: React.FC = () => {
 
 export const HeroSkeleton: React.FC = () => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-[#11141c] border border-white/5 rounded-2xl overflow-hidden p-4 sm:p-6 animate-pulse">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 bg-[#11141c] border border-white/10 rounded-2xl overflow-hidden p-6 sm:p-8 animate-pulse shadow-2xl shadow-black/60">
       <div className="lg:col-span-8 space-y-4">
-        <div className="w-full h-80 sm:h-96 skeleton-shimmer bg-[#181d28] rounded-xl" />
+        <div className="w-full aspect-[16/9] sm:aspect-[21/9] skeleton-shimmer bg-[#181d28] rounded-xl" />
         <div className="flex items-center gap-3">
           <div className="w-20 h-5 bg-[#d4af37]/20 rounded" />
           <div className="w-28 h-4 bg-white/10 rounded" />
@@ -50,12 +50,12 @@ export const HeroSkeleton: React.FC = () => {
 
       <div className="lg:col-span-4 flex flex-col justify-between space-y-4 border-t lg:border-t-0 lg:border-l border-white/5 pt-4 lg:pt-0 lg:pl-6">
         <div className="w-32 h-5 bg-white/10 rounded" />
-        <div className="space-y-4 flex-1">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="p-3 bg-white/[0.02] rounded-lg space-y-2 border border-white/5">
-              <div className="w-16 h-3.5 bg-white/10 rounded" />
-              <div className="w-full h-4 bg-white/10 rounded" />
-              <div className="w-4/5 h-4 bg-white/10 rounded" />
+        <div className="space-y-2.5 flex-1">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="p-2.5 bg-white/[0.02] rounded-lg space-y-1.5 border border-white/5">
+              <div className="w-16 h-3 bg-white/10 rounded" />
+              <div className="w-full h-3.5 bg-white/10 rounded" />
+              <div className="w-4/5 h-3.5 bg-white/10 rounded" />
             </div>
           ))}
         </div>

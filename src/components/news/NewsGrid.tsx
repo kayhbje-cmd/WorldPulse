@@ -91,7 +91,7 @@ export const NewsGrid: React.FC<NewsGridProps> = ({
         </div>
 
         {/* View Switcher & Sorting Controls */}
-        <div className="flex items-center gap-3 self-start md:self-auto">
+        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 self-start md:self-auto">
           {/* Sort Selector */}
           <div className="relative">
             <select
@@ -147,7 +147,7 @@ export const NewsGrid: React.FC<NewsGridProps> = ({
 
       {/* Loading Skeletons */}
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 items-stretch auto-rows-fr">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <NewsCardSkeleton key={i} />
           ))}
@@ -162,7 +162,7 @@ export const NewsGrid: React.FC<NewsGridProps> = ({
         <>
           {/* Render Articles by Selected View Mode */}
           {viewMode === 'grid' && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 items-stretch auto-rows-fr">
               {displayedArticles.map((article) => (
                 <NewsCard
                   key={article.id}
@@ -215,9 +215,9 @@ export const NewsGrid: React.FC<NewsGridProps> = ({
               <button
                 onClick={handleLoadMore}
                 aria-label="Load more dispatches"
-                className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-[#161a25] hover:bg-[#1d2332] text-white font-medium text-xs sm:text-sm border border-white/10 hover:border-[#d4af37]/40 transition-all active:scale-95 cursor-pointer shadow-lg shadow-black/40"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 rounded-xl bg-[#141824] hover:bg-[#1a2030] text-slate-100 font-semibold text-xs sm:text-sm border border-white/10 hover:border-[#d4af37]/50 transition-all active:scale-95 cursor-pointer shadow-xl shadow-black/50 group min-h-[44px]"
               >
-                <ArrowDownCircle className="w-4 h-4 text-[#d4af37]" />
+                <ArrowDownCircle className="w-4 h-4 text-[#d4af37] group-hover:translate-y-0.5 transition-transform" />
                 <span>Load More Dispatches ({sortedArticles.length - visibleCount} remaining)</span>
               </button>
             </div>

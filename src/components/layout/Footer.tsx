@@ -1,7 +1,7 @@
 import React from 'react';
 import { CATEGORIES } from '../../data/categories';
 import { CategoryId, ActiveView } from '../../types/news';
-import { ArrowUp, Globe2, ShieldCheck, ExternalLink, Info, Mail, Lock } from 'lucide-react';
+import { ArrowUp, Globe2, ShieldCheck, ExternalLink, Info, Mail, Lock, Briefcase } from 'lucide-react';
 import { WORLD_CLOCKS, getFormattedCityTime } from '../../utils/date';
 
 interface FooterProps {
@@ -39,13 +39,24 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory, onNavigateView
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-2 sm:gap-3">
+            <button
+              onClick={() => {
+                onNavigateView?.('portfolio');
+                scrollToTop();
+              }}
+              className="flex items-center gap-1.5 px-3 py-2 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 rounded-lg text-xs transition-colors cursor-pointer min-h-[36px]"
+            >
+              <Briefcase className="w-3.5 h-3.5 text-[#d4af37]" />
+              <span>Portfolio</span>
+            </button>
+
             <button
               onClick={() => {
                 onNavigateView?.('about');
                 scrollToTop();
               }}
-              className="flex items-center gap-1.5 px-3 py-2 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 rounded-lg text-xs transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-2 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 rounded-lg text-xs transition-colors cursor-pointer min-h-[36px]"
             >
               <Info className="w-3.5 h-3.5 text-[#d4af37]" />
               <span>About</span>
@@ -56,7 +67,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory, onNavigateView
                 onNavigateView?.('contact');
                 scrollToTop();
               }}
-              className="flex items-center gap-1.5 px-3 py-2 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 rounded-lg text-xs transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-2 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 rounded-lg text-xs transition-colors cursor-pointer min-h-[36px]"
             >
               <Mail className="w-3.5 h-3.5 text-[#d4af37]" />
               <span>Contact</span>
@@ -64,7 +75,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory, onNavigateView
 
             <button
               onClick={scrollToTop}
-              className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 rounded-lg text-xs transition-colors cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 rounded-lg text-xs transition-colors cursor-pointer min-h-[36px]"
             >
               <span>Top of Page</span>
               <ArrowUp className="w-3.5 h-3.5 text-[#d4af37]" />
@@ -73,11 +84,11 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory, onNavigateView
         </div>
 
         {/* Categories Grid */}
-        <div className="py-10 border-b border-white/10">
+        <div className="py-8 sm:py-10 border-b border-white/10">
           <div className="text-[11px] uppercase tracking-widest font-bold text-[#d4af37] mb-4">
             International News Desks &amp; Sections
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-3 text-xs">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.id}
@@ -86,7 +97,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory, onNavigateView
                   onNavigateView?.('home');
                   scrollToTop();
                 }}
-                className="text-left text-slate-300 hover:text-[#d4af37] transition-colors py-1 cursor-pointer truncate"
+                className="text-left text-slate-300 hover:text-[#d4af37] transition-colors py-1.5 cursor-pointer truncate"
               >
                 {cat.name}
               </button>
@@ -95,13 +106,13 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory, onNavigateView
         </div>
 
         {/* Global Bureaus & Clocks */}
-        <div className="py-8 border-b border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs">
+        <div className="py-6 sm:py-8 border-b border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs">
           <div className="flex items-center gap-2 text-slate-300 font-medium">
             <Globe2 className="w-4 h-4 text-[#d4af37]" />
             <span>Global Bureaus &amp; Synchronized Exchange Hours:</span>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-[11px]">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-[11px]">
             {WORLD_CLOCKS.map((clock) => (
               <div key={clock.city} className="flex items-center gap-1.5 bg-[#11141c] px-2.5 py-1 rounded border border-white/5">
                 <span className="text-slate-400">{clock.city}:</span>
@@ -122,17 +133,26 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory, onNavigateView
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px]">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-center sm:text-left">
             <div>
               &copy; {new Date().getFullYear()} WorldPulse Editorial Network. All rights reserved.
             </div>
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 sm:gap-4">
+              <button
+                onClick={() => {
+                  onNavigateView?.('portfolio');
+                  scrollToTop();
+                }}
+                className="hover:text-slate-300 text-[#d4af37] transition-colors cursor-pointer py-1 font-medium"
+              >
+                Developer Portfolio
+              </button>
               <button
                 onClick={() => {
                   onNavigateView?.('privacy');
                   scrollToTop();
                 }}
-                className="hover:text-slate-300 transition-colors cursor-pointer"
+                className="hover:text-slate-300 transition-colors cursor-pointer py-1"
               >
                 Privacy Charter
               </button>
@@ -141,7 +161,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory, onNavigateView
                   onNavigateView?.('about');
                   scrollToTop();
                 }}
-                className="hover:text-slate-300 transition-colors cursor-pointer"
+                className="hover:text-slate-300 transition-colors cursor-pointer py-1"
               >
                 Code of Ethics
               </button>
@@ -150,7 +170,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory, onNavigateView
                   onNavigateView?.('contact');
                   scrollToTop();
                 }}
-                className="hover:text-slate-300 transition-colors cursor-pointer"
+                className="hover:text-slate-300 transition-colors cursor-pointer py-1"
               >
                 Editorial Desk
               </button>
@@ -158,7 +178,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory, onNavigateView
                 href="/api/health"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-slate-300 transition-colors inline-flex items-center gap-1"
+                className="hover:text-slate-300 transition-colors inline-flex items-center gap-1 py-1"
               >
                 <span>Wire Status API</span>
                 <ExternalLink className="w-3 h-3 text-[#d4af37]" />
@@ -167,7 +187,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory, onNavigateView
                 href="https://github.com/kayhbje-cmd/WorldPulse"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-slate-300 transition-colors inline-flex items-center gap-1"
+                className="hover:text-slate-300 transition-colors inline-flex items-center gap-1 py-1"
               >
                 <span>GitHub Source</span>
                 <ExternalLink className="w-3 h-3 text-[#d4af37]" />

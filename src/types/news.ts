@@ -58,7 +58,7 @@ export type EditionType = 'global' | 'india' | 'us' | 'uk';
 
 export type ViewMode = 'grid' | 'magazine' | 'compact';
 
-export type ActiveView = 'home' | 'about' | 'contact' | 'privacy';
+export type ActiveView = 'home' | 'about' | 'contact' | 'privacy' | 'portfolio';
 
 export type SortOption = 'latest' | 'trending' | 'reading_time';
 

@@ -78,7 +78,7 @@ export const BreakingNewsBar: React.FC<BreakingNewsBarProps> = ({ articles, onSe
       </div>
 
       {/* Navigation Controls */}
-      <div className="flex items-center gap-1.5 shrink-0 ml-3 pl-3 border-l border-white/10">
+      <div className="flex items-center gap-1 sm:gap-1.5 shrink-0 ml-2 sm:ml-3 pl-2 sm:pl-3 border-l border-white/10">
         <span className="text-[11px] font-mono text-slate-400 hidden sm:inline mr-1">
           {currentIndex + 1}/{breakingList.length}
         </span>
@@ -87,7 +87,7 @@ export const BreakingNewsBar: React.FC<BreakingNewsBarProps> = ({ articles, onSe
           onClick={handlePrev}
           aria-label="Previous breaking headline"
           title="Previous dispatch"
-          className="p-1 hover:bg-white/10 rounded text-slate-400 hover:text-white transition-colors cursor-pointer"
+          className="p-1 min-w-[28px] min-h-[28px] flex items-center justify-center hover:bg-white/10 rounded-md text-slate-400 hover:text-white transition-colors cursor-pointer"
         >
           <ChevronLeft className="w-3.5 h-3.5" />
         </button>
@@ -96,7 +96,7 @@ export const BreakingNewsBar: React.FC<BreakingNewsBarProps> = ({ articles, onSe
           onClick={togglePlay}
           aria-label={isPlaying ? 'Pause breaking news ticker' : 'Resume breaking news ticker'}
           title={isPlaying ? 'Pause ticker' : 'Resume ticker'}
-          className="p-1 hover:bg-white/10 rounded text-slate-400 hover:text-white transition-colors cursor-pointer"
+          className="p-1 min-w-[28px] min-h-[28px] flex items-center justify-center hover:bg-white/10 rounded-md text-slate-400 hover:text-white transition-colors cursor-pointer"
         >
           {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
         </button>
@@ -105,7 +105,7 @@ export const BreakingNewsBar: React.FC<BreakingNewsBarProps> = ({ articles, onSe
           onClick={handleNext}
           aria-label="Next breaking headline"
           title="Next dispatch"
-          className="p-1 hover:bg-white/10 rounded text-slate-400 hover:text-white transition-colors cursor-pointer"
+          className="p-1 min-w-[28px] min-h-[28px] flex items-center justify-center hover:bg-white/10 rounded-md text-slate-400 hover:text-white transition-colors cursor-pointer"
         >
           <ChevronRight className="w-3.5 h-3.5" />
         </button>

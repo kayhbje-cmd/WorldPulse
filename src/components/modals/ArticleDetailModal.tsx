@@ -95,28 +95,28 @@ export const ArticleDetailModal: React.FC<ArticleDetailModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-label={article.title}
-      className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-6 animate-in fade-in duration-200"
     >
       {/* Modal Container */}
       <div className="bg-[#11141c] border border-white/10 rounded-2xl sm:rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto relative shadow-2xl shadow-black text-slate-100 flex flex-col">
         {/* Sticky Action Header */}
-        <div className="sticky top-0 z-20 bg-[#11141c]/95 backdrop-blur-md px-6 py-4 border-b border-white/10 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <span className="px-3 py-1 rounded bg-[#d4af37] text-neutral-950 font-bold text-xs uppercase tracking-wider">
+        <div className="sticky top-0 z-20 bg-[#11141c]/95 backdrop-blur-md px-3.5 sm:px-6 py-3 sm:py-4 border-b border-white/10 flex items-center justify-between gap-2 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <span className="px-2.5 py-1 rounded bg-[#d4af37] text-neutral-950 font-bold text-[11px] sm:text-xs uppercase tracking-wider shrink-0">
               {article.category}
             </span>
-            <span className="text-slate-300 font-semibold text-xs hidden sm:inline">
+            <span className="text-slate-300 font-semibold text-xs hidden sm:inline truncate max-w-xs">
               {article.source.name}
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             {/* Audio TTS Button */}
             <button
               onClick={handleAudioToggle}
               aria-label={isPlayingAudio ? 'Stop audio briefing' : 'Listen to audio briefing'}
               title={isPlayingAudio ? 'Stop reading' : 'Listen to Briefing'}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all cursor-pointer min-h-[34px] ${
                 isPlayingAudio
                   ? 'bg-amber-500/20 border-[#d4af37] text-[#f5e6a3]'
                   : 'bg-white/5 border-white/10 text-slate-300 hover:text-white hover:bg-white/10'
@@ -147,7 +147,7 @@ export const ArticleDetailModal: React.FC<ArticleDetailModalProps> = ({
               }}
               aria-label={`Toggle font size, currently ${modalFontSize}`}
               title="Adjust Font Size"
-              className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition-colors cursor-pointer"
+              className="p-1.5 sm:p-2 min-w-[34px] min-h-[34px] flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition-colors cursor-pointer"
             >
               <Type className="w-4 h-4 text-[#d4af37]" />
             </button>
@@ -157,7 +157,7 @@ export const ArticleDetailModal: React.FC<ArticleDetailModalProps> = ({
               onClick={() => onToggleBookmark(article.id)}
               aria-label={isBookmarked ? 'Remove Bookmark' : 'Save article'}
               title={isBookmarked ? 'Remove Bookmark' : 'Save article'}
-              className={`p-2 rounded-lg border transition-colors cursor-pointer ${
+              className={`p-1.5 sm:p-2 min-w-[34px] min-h-[34px] flex items-center justify-center rounded-lg border transition-colors cursor-pointer ${
                 isBookmarked
                   ? 'bg-[#d4af37]/20 border-[#d4af37] text-[#d4af37]'
                   : 'bg-white/5 border-white/10 text-slate-400 hover:text-white'
@@ -171,7 +171,7 @@ export const ArticleDetailModal: React.FC<ArticleDetailModalProps> = ({
               onClick={() => onShare(article)}
               aria-label="Share article"
               title="Share article"
-              className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
+              className="p-1.5 sm:p-2 min-w-[34px] min-h-[34px] flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
             >
               <Share2 className="w-4 h-4" />
             </button>
@@ -183,7 +183,7 @@ export const ArticleDetailModal: React.FC<ArticleDetailModalProps> = ({
                 onClose();
               }}
               aria-label="Close reading modal"
-              className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer ml-1"
+              className="p-1.5 sm:p-2 min-w-[34px] min-h-[34px] flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer ml-0.5 sm:ml-1"
             >
               <X className="w-5 h-5" />
             </button>
@@ -191,7 +191,7 @@ export const ArticleDetailModal: React.FC<ArticleDetailModalProps> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 sm:p-10 space-y-8 flex-1">
+        <div className="p-4 sm:p-8 md:p-10 space-y-6 sm:space-y-8 flex-1">
           {/* Metadata Byline */}
           <div className="space-y-4">
             <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400">
@@ -297,7 +297,7 @@ export const ArticleDetailModal: React.FC<ArticleDetailModalProps> = ({
               href={article.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#d4af37] hover:bg-[#e5c07b] text-neutral-950 font-bold text-xs sm:text-sm tracking-wide transition-all active:scale-95 cursor-pointer shadow-lg shadow-[#d4af37]/20 shrink-0"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#d4af37] hover:bg-[#e5c07b] text-neutral-950 font-bold text-xs sm:text-sm tracking-wide transition-all active:scale-95 cursor-pointer shadow-lg shadow-[#d4af37]/20 shrink-0 min-h-[44px]"
             >
               <span>Visit {article.source.name}</span>
               <ExternalLink className="w-4 h-4" />

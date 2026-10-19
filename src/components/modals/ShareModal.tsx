@@ -59,18 +59,18 @@ export const ShareModal: React.FC<ShareModalProps> = ({ article, onClose }) => {
       role="dialog"
       aria-modal="true"
       aria-label="Share article dialog"
-      className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200"
     >
-      <div className="bg-[#11141c] border border-white/10 rounded-2xl max-w-md w-full p-6 shadow-2xl shadow-black text-slate-100 space-y-6">
+      <div className="bg-[#11141c] border border-white/10 rounded-2xl max-w-md w-full p-4 sm:p-6 shadow-2xl shadow-black text-slate-100 space-y-5 sm:space-y-6">
         <div className="flex items-center justify-between pb-3 border-b border-white/10">
           <div className="flex items-center gap-2">
             <Share2 className="w-5 h-5 text-[#d4af37]" />
-            <h3 className="font-serif text-lg font-bold text-white">Share Dispatch</h3>
+            <h3 className="font-serif text-base sm:text-lg font-bold text-white">Share Dispatch</h3>
           </div>
           <button
             onClick={onClose}
             aria-label="Close share dialog"
-            className="p-1 text-slate-400 hover:text-white rounded-lg cursor-pointer"
+            className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center text-slate-400 hover:text-white rounded-lg cursor-pointer hover:bg-white/5 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -78,7 +78,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ article, onClose }) => {
 
         <div className="p-3 bg-white/5 rounded-xl border border-white/5">
           <span className="text-[10px] text-[#d4af37] uppercase font-bold">{article.category}</span>
-          <h4 className="font-serif text-sm font-semibold text-white line-clamp-2 mt-1">
+          <h4 className="font-serif text-xs sm:text-sm font-semibold text-white line-clamp-2 mt-1">
             {article.title}
           </h4>
         </div>
@@ -92,12 +92,12 @@ export const ShareModal: React.FC<ShareModalProps> = ({ article, onClose }) => {
               readOnly
               value={shareUrl}
               aria-label="Article share URL"
-              className="w-full bg-[#0b0d13] border border-white/10 rounded-lg px-3 py-2 text-xs text-slate-300 font-mono focus:outline-none"
+              className="w-full bg-[#0b0d13] border border-white/10 rounded-lg px-3 py-2 text-xs text-slate-300 font-mono focus:outline-none min-h-[38px]"
             />
             <button
               onClick={handleCopy}
               aria-label={copied ? 'URL copied to clipboard' : 'Copy URL to clipboard'}
-              className={`px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 ${
+              className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shrink-0 min-h-[38px] ${
                 copied
                   ? 'bg-emerald-500 text-neutral-950 font-bold'
                   : 'bg-[#d4af37] hover:bg-[#e5c07b] text-neutral-950'
@@ -119,7 +119,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ article, onClose }) => {
         </div>
 
         {/* Social Buttons */}
-        <div className="grid grid-cols-2 gap-2.5 pt-2">
+        <div className="grid grid-cols-2 gap-2 sm:gap-2.5 pt-1 sm:pt-2">
           {shareOptions.map((opt) => (
             <a
               key={opt.name}
@@ -127,7 +127,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ article, onClose }) => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Share on ${opt.name}`}
-              className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 text-xs text-slate-200 hover:text-white transition-colors cursor-pointer"
+              className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 text-xs text-slate-200 hover:text-white transition-colors cursor-pointer min-h-[42px]"
             >
               <span className="font-bold text-[#d4af37] font-mono">{opt.icon}</span>
               <span>{opt.name}</span>
