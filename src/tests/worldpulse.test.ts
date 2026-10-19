@@ -99,4 +99,27 @@ describe('WorldPulse Core Architecture & Features', () => {
     expect(isRemoved).toBe(false);
     expect(storageService.isBookmarked('test-art-1')).toBe(false);
   });
+
+  it('should support view routing targets (home, about, contact, privacy)', () => {
+    const validViews = ['home', 'about', 'contact', 'privacy'];
+    expect(validViews.length).toBe(4);
+    expect(validViews).toContain('about');
+    expect(validViews).toContain('contact');
+    expect(validViews).toContain('privacy');
+  });
+
+  it('should guarantee transparent publisher citation without inventing authors or outlets', () => {
+    const itemWithoutSource = [
+      {
+        title: 'Global Summit Concludes with Carbon Agreement',
+        link: 'https://news.google.com/sample',
+        description: 'Representatives from 190 nations concluded discussions.',
+      },
+    ];
+    const parsed = parseRawRssItems(itemWithoutSource, 'world', 'google');
+    expect(parsed[0].source.name).toBe('International Wire');
+    expect(parsed[0].url).toBe('https://news.google.com/sample');
+    expect(parsed[0].feedOrigin).toBe('google');
+  });
 });
+

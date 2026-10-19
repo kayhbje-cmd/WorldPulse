@@ -1,14 +1,15 @@
 import React from 'react';
 import { CATEGORIES } from '../../data/categories';
-import { CategoryId } from '../../types/news';
-import { ArrowUp, Globe2, ShieldCheck, Radio, ExternalLink } from 'lucide-react';
+import { CategoryId, ActiveView } from '../../types/news';
+import { ArrowUp, Globe2, ShieldCheck, ExternalLink, Info, Mail, Lock } from 'lucide-react';
 import { WORLD_CLOCKS, getFormattedCityTime } from '../../utils/date';
 
 interface FooterProps {
   onSelectCategory: (id: CategoryId) => void;
+  onNavigateView?: (view: ActiveView) => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
+export const Footer: React.FC<FooterProps> = ({ onSelectCategory, onNavigateView }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -19,26 +20,56 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
         {/* Top Masthead & Back-to-Top Row */}
         <div className="flex flex-col md:flex-row items-center justify-between pb-10 border-b border-white/10 gap-6">
           <div className="text-center md:text-left">
-            <div className="flex items-center justify-center md:justify-start gap-2.5 mb-2">
+            <button
+              onClick={() => {
+                onNavigateView?.('home');
+                scrollToTop();
+              }}
+              className="flex items-center justify-center md:justify-start gap-2.5 mb-2 cursor-pointer text-left group"
+            >
               <div className="w-6 h-6 rounded bg-gradient-to-br from-[#d4af37] to-[#997b2f] flex items-center justify-center text-neutral-950 font-serif font-black text-sm">
                 W
               </div>
-              <span className="font-brand text-2xl font-black tracking-widest text-white">
+              <span className="font-brand text-2xl font-black tracking-widest text-white group-hover:text-[#f5e6a3] transition-colors">
                 WORLD<span className="text-[#d4af37]">PULSE</span>
               </span>
-            </div>
+            </button>
             <p className="text-xs text-slate-400 max-w-md font-serif italic">
               "The Pulse of Global Affairs" &bull; Continuous real-time journalism and verified international news dispatches.
             </p>
           </div>
 
-          <button
-            onClick={scrollToTop}
-            className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 rounded-lg text-xs transition-colors cursor-pointer"
-          >
-            <span>Top of Page</span>
-            <ArrowUp className="w-3.5 h-3.5 text-[#d4af37]" />
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                onNavigateView?.('about');
+                scrollToTop();
+              }}
+              className="flex items-center gap-1.5 px-3 py-2 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 rounded-lg text-xs transition-colors cursor-pointer"
+            >
+              <Info className="w-3.5 h-3.5 text-[#d4af37]" />
+              <span>About</span>
+            </button>
+
+            <button
+              onClick={() => {
+                onNavigateView?.('contact');
+                scrollToTop();
+              }}
+              className="flex items-center gap-1.5 px-3 py-2 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 rounded-lg text-xs transition-colors cursor-pointer"
+            >
+              <Mail className="w-3.5 h-3.5 text-[#d4af37]" />
+              <span>Contact</span>
+            </button>
+
+            <button
+              onClick={scrollToTop}
+              className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 rounded-lg text-xs transition-colors cursor-pointer"
+            >
+              <span>Top of Page</span>
+              <ArrowUp className="w-3.5 h-3.5 text-[#d4af37]" />
+            </button>
+          </div>
         </div>
 
         {/* Categories Grid */}
@@ -52,6 +83,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
                 key={cat.id}
                 onClick={() => {
                   onSelectCategory(cat.id);
+                  onNavigateView?.('home');
                   scrollToTop();
                 }}
                 className="text-left text-slate-300 hover:text-[#d4af37] transition-colors py-1 cursor-pointer truncate"
@@ -94,11 +126,52 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
             <div>
               &copy; {new Date().getFullYear()} WorldPulse Editorial Network. All rights reserved.
             </div>
-            <div className="flex items-center gap-4">
-              <a href="#" className="hover:text-slate-300 transition-colors">Privacy Charter</a>
-              <a href="#" className="hover:text-slate-300 transition-colors">Code of Ethics</a>
-              <a href="#" className="hover:text-slate-300 transition-colors">Syndication API</a>
-              <a href="#" className="hover:text-slate-300 transition-colors">Terms of Dispatch</a>
+            <div className="flex flex-wrap items-center gap-4">
+              <button
+                onClick={() => {
+                  onNavigateView?.('privacy');
+                  scrollToTop();
+                }}
+                className="hover:text-slate-300 transition-colors cursor-pointer"
+              >
+                Privacy Charter
+              </button>
+              <button
+                onClick={() => {
+                  onNavigateView?.('about');
+                  scrollToTop();
+                }}
+                className="hover:text-slate-300 transition-colors cursor-pointer"
+              >
+                Code of Ethics
+              </button>
+              <button
+                onClick={() => {
+                  onNavigateView?.('contact');
+                  scrollToTop();
+                }}
+                className="hover:text-slate-300 transition-colors cursor-pointer"
+              >
+                Editorial Desk
+              </button>
+              <a
+                href="/api/health"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-slate-300 transition-colors inline-flex items-center gap-1"
+              >
+                <span>Wire Status API</span>
+                <ExternalLink className="w-3 h-3 text-[#d4af37]" />
+              </a>
+              <a
+                href="https://github.com/kayhbje-cmd/WorldPulse"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-slate-300 transition-colors inline-flex items-center gap-1"
+              >
+                <span>GitHub Source</span>
+                <ExternalLink className="w-3 h-3 text-[#d4af37]" />
+              </a>
             </div>
           </div>
         </div>

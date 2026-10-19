@@ -9,8 +9,11 @@ import {
   Type,
   ChevronDown,
   Layers,
+  Info,
+  Mail,
+  Home,
 } from 'lucide-react';
-import { EditionType, CategoryId } from '../../types/news';
+import { EditionType, CategoryId, ActiveView } from '../../types/news';
 import { CATEGORIES } from '../../data/categories';
 import { formatFullDate, WORLD_CLOCKS, getFormattedCityTime } from '../../utils/date';
 
@@ -23,6 +26,8 @@ interface NavbarProps {
   fontSize: 'normal' | 'large' | 'xl';
   onToggleFontSize: () => void;
   onSelectCategory?: (id: CategoryId) => void;
+  currentView?: ActiveView;
+  onNavigateView?: (view: ActiveView) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -34,6 +39,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   fontSize,
   onToggleFontSize,
   onSelectCategory,
+  currentView = 'home',
+  onNavigateView,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [editionDropdownOpen, setEditionDropdownOpen] = useState(false);
@@ -166,7 +173,13 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Center: Luxury Editorial Brand Logo */}
         <div className="flex-1 md:flex-initial text-center md:text-left">
-          <a href="#" className="inline-block group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]">
+          <button
+            onClick={() => {
+              onNavigateView?.('home');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="inline-block group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37] text-left cursor-pointer"
+          >
             <div className="flex items-center justify-center md:justify-start gap-2.5">
               <div className="w-7 h-7 sm:w-8 sm:h-8 rounded bg-gradient-to-br from-[#d4af37] to-[#997b2f] flex items-center justify-center text-neutral-950 font-serif font-black text-base sm:text-lg shadow-lg shadow-[#d4af37]/20">
                 W
@@ -178,11 +191,45 @@ export const Navbar: React.FC<NavbarProps> = ({
             <p className="text-[10px] sm:text-[11px] font-serif tracking-[0.25em] text-[#d4af37]/80 uppercase mt-1 text-center md:text-left">
               The Pulse of Global Affairs &bull; International Intelligence
             </p>
-          </a>
+          </button>
         </div>
 
-        {/* Right: Search & Bookmarks */}
+        {/* Right: View Navigation, Search & Bookmarks */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Desktop Editorial Navigation Links */}
+          <nav className="hidden md:flex items-center gap-1 mr-1" aria-label="Main Editorial Views">
+            <button
+              onClick={() => onNavigateView?.('home')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                currentView === 'home'
+                  ? 'text-[#d4af37] bg-[#d4af37]/10 border border-[#d4af37]/30'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent'
+              }`}
+            >
+              Live Wire
+            </button>
+            <button
+              onClick={() => onNavigateView?.('about')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                currentView === 'about'
+                  ? 'text-[#d4af37] bg-[#d4af37]/10 border border-[#d4af37]/30'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent'
+              }`}
+            >
+              About
+            </button>
+            <button
+              onClick={() => onNavigateView?.('contact')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                currentView === 'contact'
+                  ? 'text-[#d4af37] bg-[#d4af37]/10 border border-[#d4af37]/30'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent'
+              }`}
+            >
+              Contact
+            </button>
+          </nav>
+
           {/* Search Trigger Button */}
           <button
             onClick={onOpenSearch}
@@ -190,7 +237,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-[#141824] hover:bg-[#1a2030] text-slate-300 hover:text-white border border-white/10 hover:border-[#d4af37]/40 transition-all text-xs cursor-pointer shadow-sm group"
           >
             <Search className="w-4 h-4 text-[#d4af37] group-hover:scale-110 transition-transform" />
-            <span className="hidden sm:inline">Search News Wire...</span>
+            <span className="hidden sm:inline">Search Wire...</span>
             <kbd className="hidden lg:inline px-1.5 py-0.5 text-[10px] font-mono text-slate-400 bg-black/40 border border-white/10 rounded">
               ⌘K
             </kbd>
@@ -217,6 +264,52 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-white/10 bg-[#0d0f15] px-4 py-5 space-y-5 animate-in slide-in-from-top duration-200">
+          {/* Mobile View Navigation */}
+          <div className="grid grid-cols-3 gap-2 pb-2 border-b border-white/10">
+            <button
+              onClick={() => {
+                onNavigateView?.('home');
+                setMobileMenuOpen(false);
+              }}
+              className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-semibold border cursor-pointer ${
+                currentView === 'home'
+                  ? 'bg-[#d4af37]/20 border-[#d4af37] text-[#f5e6a3]'
+                  : 'bg-white/5 border-white/10 text-slate-300'
+              }`}
+            >
+              <Home className="w-3.5 h-3.5 text-[#d4af37]" />
+              <span>Live Wire</span>
+            </button>
+            <button
+              onClick={() => {
+                onNavigateView?.('about');
+                setMobileMenuOpen(false);
+              }}
+              className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-semibold border cursor-pointer ${
+                currentView === 'about'
+                  ? 'bg-[#d4af37]/20 border-[#d4af37] text-[#f5e6a3]'
+                  : 'bg-white/5 border-white/10 text-slate-300'
+              }`}
+            >
+              <Info className="w-3.5 h-3.5 text-[#d4af37]" />
+              <span>About</span>
+            </button>
+            <button
+              onClick={() => {
+                onNavigateView?.('contact');
+                setMobileMenuOpen(false);
+              }}
+              className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-semibold border cursor-pointer ${
+                currentView === 'contact'
+                  ? 'bg-[#d4af37]/20 border-[#d4af37] text-[#f5e6a3]'
+                  : 'bg-white/5 border-white/10 text-slate-300'
+              }`}
+            >
+              <Mail className="w-3.5 h-3.5 text-[#d4af37]" />
+              <span>Contact</span>
+            </button>
+          </div>
+
           {/* Mobile Quick Action Buttons */}
           <div className="grid grid-cols-2 gap-2">
             <button
